@@ -1,0 +1,266 @@
+@import "./constants.css";
+
+body{
+	margin:0;
+	background: #f1efef;
+	font-family: 'Roboto', sans-serif;
+}
+
+.ut-player-container.ut-screen-1{
+	width: 100%;
+	position: relative;
+}
+.ut-rnd.ut-screen-1,.ut-rnd.ut-screen-1 > div{
+	width: 100%!important;
+}
+.ut-rnd.ut-screen-2 > div{
+	display: flex;
+	flex-direction: row;
+}
+.ut-dragger{
+	background: #211f1f;
+	flex-direction: row-reverse;
+  padding: 6px 0px;
+	cursor: pointer;
+}
+.ut-rnd.ut-screen-0 .ut-dragger,.ut-rnd.ut-screen-1 .ut-dragger{
+		visibility: hidden;
+    display: none;
+}
+.ut-rnd.ut-screen-2 .ut-dragger{
+	visibility: visible;
+}
+.ut-rnd{
+    cursor: default!important;
+}
+.ut-rnd.ut-screen-0,.ut-rnd.ut-screen-1{
+	transform: none!important;
+  position: inherit!important;
+}
+
+
+.ut-player{
+	background: #f8f8f8;
+}
+.ut-player,.ut-layers {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+.ut-player.isFullScreen{
+	height: 100%!important;
+	width: 100%!important;
+}
+.ut-layers > div {
+    position: absolute;
+}
+.ut-playpause-layer{
+	top: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.ut-controls-layer {
+    width: 100%;
+		z-index: 10;
+		color: #FFF;
+    font-size: 13px;
+		bottom: -50%;
+}
+.ut-player.showControls .ut-controls-layer{
+	bottom: 0;
+}
+.ut-video-layer {
+    height: 100%;
+    width: 100%;
+}
+
+.ut-video-layer video {
+    height: 100%;
+    width: 100%;
+}
+.ut-volume-container{
+  width: var(--widthVolume);
+  align-items: center;
+  margin-right: 20px;
+	transition: 0.15s linear width;
+}
+.ut-volume-container.compress{
+	width: var(--compressedWidthVolume);
+}
+.ut-volume-slider-container{
+	transition: var(--volumeTransitionTime) linear flex;
+}
+.ut-volume-slider-container.hideSlider{
+  flex: none;
+	overflow: hidden;
+}
+.ut-rails {
+    position: relative;
+    padding: 0px;
+    box-sizing: border-box;
+		cursor: pointer;
+		z-index: 1;
+}
+.ut-total{
+    position: relative;
+		display: flex;
+		align-items: center;
+		height: var(--totalheightVolume);
+}
+.ut-total,.ut-current{
+	border-radius: 4px;
+}
+.ut-main-slider .ut-rails:hover .ut-total {
+	height: var(--totalheight);
+}
+.ut-loaded, .ut-current,.ut-hovered{
+		height: 100%;
+		width: 100%;
+    position: absolute;
+		left: 0;
+    transform: scaleX(0);
+    transform-origin: 0 0;
+}
+.ut-handle-wrapper{ /*SO/21557476 some genius shit here dont worry bout it*/
+	position: absolute;
+	width: 100%;
+	z-index: 4;
+}
+.ut-handle,.ut-handle-baby{
+	z-index: 11;
+	transform: translateX(0px);
+	border-radius: 50%;
+}
+
+.ut-handle-baby{
+		width: var(--handleDimension);
+		height: var(--handleDimension);
+    transform:scale(1);
+    border-radius: 50%;
+		border: var(--handleBorderVolume) solid var(--primaryColorVolume);
+		background: var(--primaryColorLightVolume);
+}
+.ut-loaded, .ut-current,.ut-handle,.ut-handle-baby{
+	transition: all .15s ease-in;
+}
+.ut-current{ background: var(--primaryColorVolume); }
+.ut-loaded{ background: var(--loadedColor); }
+.ut-total{ background: var(--totalColor); }
+.ut-hovered{ background: var(--hoveredColor); opacity: 0;z-index: 2;}
+.ut-hovered.negativehovered{ background: var(--negativehoveredColor); }
+.ut-main-slider .ut-current{
+	background: var(--primaryColor);
+}
+.ut-rails:hover .ut-handle-baby,.ut-rails.mouseIsDown .ut-handle-baby{
+	transform: scale(1);
+}
+.ut-rails:hover .ut-hovered{
+	opacity: 1;
+}
+.ut-rails.mouseIsDown .ut-current,.ut-rails.mouseIsDown .ut-handle,.ut-rails.mouseIsDown .ut-handle-baby{
+	transition: none;
+}
+.ut-main-slider .ut-rails{
+	padding: 5px 10px;
+	height: var(--totalheight);
+}
+.ut-main-slider .ut-handle-baby{
+	transform:scale(0);
+}
+.ut-main-slider .ut-total,.ut-main-slider .ut-current{
+	border-radius: 0px;
+}
+.ut-main-slider .ut-total{
+	height: var(--totalheightCompressed);
+	transition: .15s linear height;
+}
+.ut-main-slider .ut-handle-baby{
+	border: var(--handleBorder) solid var(--primaryColor);
+	background: var(--primaryColorLight);
+}
+
+.ut-control-bg{
+	position: absolute;
+	bottom: 0;
+	height: 100px;
+	width: 100%;
+	background-image: url('https://i.imgur.com/uMopswI.png');
+	background-repeat: repeat-x;
+	pointer-events: none;
+	background-position: bottom;
+}
+
+.playpauseanimate{
+	opacity:0;
+	transform-origin:bottom;
+  transition:1s linear all;
+  pointer-events: none;
+  z-index: 10;
+	background: hsla(0, 0%, 0%, .3);
+  border-radius: 50%;
+  color: #FFF;
+}
+.playpauseanimate.beginanimate{
+    animation: playpauseFadeAnimate 1s ease-out;
+}
+
+@keyframes playpauseFadeAnimate {
+    0% {
+        display: none;
+        opacity: 0;
+		    transform:scale(0);
+    }
+
+    1% {
+        display: block;
+        opacity: 1;
+    }
+
+    100% {
+        display: block;
+        opacity: 0;
+  		  transform:scale(4);
+    }
+}
+.ut-menucontent{
+	width: 50%;
+}
+.ut-menulabel{
+	 line-height: initial;
+	 font-size: 13px;
+}
+.ut-menulabel2{
+	width: 30%;
+	line-height: initial;
+  font-size: 12px;
+  color: #a0a0a0;
+}
+.ut-menulabel,.ut-menucontent{
+	color: #cccaca;
+}
+
+.ut-settingsList{
+	background: rgba(0, 0, 0, 0.85);
+  z-index: 100;
+	position: absolute;
+	bottom: 100%;
+	right: 10px;
+	width: 230px;
+}
+
+.ut-buffer-layer{
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+
+.ut-errortv-layer{
+	width: 100%;
+	height: 100%;
+}

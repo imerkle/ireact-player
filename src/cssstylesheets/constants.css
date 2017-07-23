@@ -1,0 +1,34 @@
+:root {
+	--themePrimary: #FFF;
+	--searchBarWidthClosed: 150px;
+	--searchBarWidthOpened: 250px;
+
+	--loadedColor: rgba(255, 255, 255, .3);
+	--hoveredColor: rgba(255,255,255,.5);;
+	--negativehoveredColor: rgba(0,0,0,.2);
+	--totalColor: rgba(255, 255, 255, 0.3);
+	--primaryColor: #f12c35;
+	--primaryColorLight: #fb3942;
+
+	--primaryColorVolume: #f8f8f8;
+	--primaryColorLightVolume: #ffffff;
+
+	--totalheight: 5px;
+	--totalheightCompressed: 3px;
+	--handleDimension: 5px;
+	--handleTop: -4px;
+
+	--totalheightVolume: 3px;
+	--handleBorder: 4px;
+	--handleBorderVolume: 3px;
+
+	--widthVolume: 80px;
+	--compressedWidthVolume: 30px;
+	--volumeTransitionTime: .05s;
+}
+@custom-selector :--whenOverlayBlur .darkErrorVisible .HeadBarMain, .darkErrorVisible .app-content;
+@custom-selector :--whenOverlayNotBlur .darkErrorNotVisible .HeadBarMain, .darkErrorNotVisible .app-content;
+
+@custom-selector :--disabledButton button:disabled,button:disabled:hover,button:disabled:focus,button:disabled:active;
+
+@custom-selector :--hideWhenLight .LIGHT_THEME .startup-bg;
