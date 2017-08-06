@@ -55,34 +55,8 @@ body{
 .ut-layers > div {
     position: absolute;
 }
-.ut-playpause-layer{
-	top: 0;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  z-index: 1;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-.ut-controls-layer {
-    width: 100%;
-		z-index: 10;
-		color: #FFF;
-    font-size: 13px;
-		bottom: -50%;
-}
 .ut-player.showControls .ut-controls-layer{
 	bottom: 0;
-}
-.ut-video-layer {
-    height: 100%;
-    width: 100%;
-}
-
-.ut-video-layer video {
-    height: 100%;
-    width: 100%;
 }
 .ut-volume-container{
   width: var(--widthVolume);
@@ -195,21 +169,6 @@ body{
 	pointer-events: none;
 	background-position: bottom;
 }
-
-.playpauseanimate{
-	opacity:0;
-	transform-origin:bottom;
-  transition:1s linear all;
-  pointer-events: none;
-  z-index: 10;
-	background: hsla(0, 0%, 0%, .3);
-  border-radius: 50%;
-  color: #FFF;
-}
-.playpauseanimate.beginanimate{
-    animation: playpauseFadeAnimate 1s ease-out;
-}
-
 @keyframes playpauseFadeAnimate {
     0% {
         display: none;

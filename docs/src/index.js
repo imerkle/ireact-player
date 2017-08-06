@@ -5,21 +5,88 @@ import { VideoPlayer } from 'utube';
 
 import BundleStyles from '../../src/BundleStyles.js';
 import { MuiThemeProvider } from 'material-ui/styles';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import { Icon } from 'material-ui';
 
 
-injectTapEventPlugin();
+class Header extends React.Component{
+  constructor(props){
+    super(props)
+  }
+  render(){
+    return (
+      <div style={{
+        height: '500px',
+        color: 'white',
+      }} >
+        <div style={{
+          position: 'absolute',
+          left: '0',
+          top: '20%',
+          right: '0',
+          transform: 'skewY(-12deg)',
+          zIndex: '-1',
+        }}>
+          <div style={{
+            background: 'radial-gradient(farthest-corner at 0px 6000px, #61045f 0%, #282d4c 100%)',
+            height: '2000px',
+            position: 'absolute',
+            top: 'auto',
+            left: '0',
+            right: '0',
+            bottom: '-340px',
+          }}>
+          </div>
+        </div>
+
+        <div style={{
+          padding: '30px',
+          display: 'flex',
+          alignItems: 'center',
+          fontWeight: 'bold',
+          fontSize: '50px',
+        }}>
+          {this.props.logo}
+          <div style={{
+            marginLeft: '20px',
+          }}>
+            {this.props.logohead}
+          </div>
+        </div>
+        <div style={{
+          fontSize: '30px',
+          textAlign: 'center',
+        }}>
+          {this.props.tagline}
+        </div>
+        <div style={{
+          padding: '30px',
+          textAlign: 'center',
+        }}>
+          {this.props.children}
+        </div>
+      </div>
+    )
+  }
+}
 
 render(
-    <div>
+    <Header
+      logo={
+        <Icon color="inherit" style={{fontSize: '80px'}}>{'play_arrow'}</Icon>
+      }
+      logohead="iReact Player"
+      tagline="Modern Sleek Extensible React Player"
+      >
       <div className="ut-player-container">
-        <VideoPlayer autoQuality={false} style={{width:840,height:480}}
+        <VideoPlayer autoQuality={false} style={{width:640,height:360,textAlign: 'left'}}
           src={[
             {
               src: 'http://dash.edgesuite.net/envivio/EnvivioDash3/manifest.mpd',
-              src: 'https://www.youtube.com/watch?v=vZiUBoZ454E',
               src: 'https://www.youtube.com/watch?v=LCZ-cxfxzvk',
-              src: 'assets/A real life emoji snake.mp4',
+              src: 'https://www.youtube.com/watch?v=vZiUBoZ454E',
+              src: 'assets/Kurzweil-K2000-Dual-Bass-C1.wav',
+              src: 'assets/You found Me.mp3',
+              src: 'assets/Dogs Just Don\'t Want to Bath 2015 [HD].mp4',
               value: 240,
               size: 20,
               duration: 6.08*60,
@@ -57,7 +124,7 @@ render(
 */
         />
       </div>
-    </div>
+    </Header>
   ,document.getElementById('app'));
   /*
   highres, hd1080, hd720, large, medium and small

@@ -1410,6 +1410,12 @@ convert-source-map@^1.1.0, convert-source-map@^1.4.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.5.0.tgz#9acd70851c6d5dfdd93d9282e5edf94a03ff46b5"
 
+copy-to-clipboard@^3.0.7:
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/copy-to-clipboard/-/copy-to-clipboard-3.0.7.tgz#0cfb69c6f54f460dcc9d6c55835efdcbc92c4a3a"
+  dependencies:
+    toggle-selection "^1.0.3"
+
 core-js@^1.0.0:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
@@ -2349,7 +2355,7 @@ glob@^7.0.0, glob@^7.0.3, glob@^7.0.5, glob@^7.1.1, glob@^7.1.2:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-global@~4.3.0:
+global@^4.3.2, global@~4.3.0:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/global/-/global-4.3.2.tgz#e76989268a6c74c38908b1305b10fc0e394e9d0f"
   dependencies:
@@ -3476,7 +3482,16 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
-material-ui@^1.0.0-alpha.21:
+material-son@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/material-son/-/material-son-1.4.1.tgz#e747d2267d3929d63e868883a2f958c47540f2c2"
+  dependencies:
+    classnames "^2.2.5"
+    global "^4.3.2"
+    prop-types "^15.5.10"
+    react-contextmenu "^2.6.5"
+
+material-ui@next:
   version "1.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/material-ui/-/material-ui-1.0.0-beta.2.tgz#92b36180be67153bc23b73a240ca354f741010eb"
   dependencies:
@@ -4644,6 +4659,20 @@ react-addons-test-utils@^15.6.0:
   version "15.6.0"
   resolved "https://registry.yarnpkg.com/react-addons-test-utils/-/react-addons-test-utils-15.6.0.tgz#062d36117fe8d18f3ba5e06eb33383b0b85ea5b9"
 
+react-contextmenu-material@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/react-contextmenu-material/-/react-contextmenu-material-1.0.4.tgz#46d8dbacdbc43e837d2e4162fa215aba067dd69e"
+  dependencies:
+    classnames "^2.2.5"
+    object-assign "^4.1.0"
+
+react-contextmenu@^2.6.5:
+  version "2.6.5"
+  resolved "https://registry.yarnpkg.com/react-contextmenu/-/react-contextmenu-2.6.5.tgz#8e6e2cea4f9ad4f9f2a478703cbde8d29f565cd6"
+  dependencies:
+    classnames "^2.2.5"
+    object-assign "^4.1.0"
+
 react-dom@^15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.1.tgz#2cb0ed4191038e53c209eb3a79a23e2a4cf99470"
@@ -5362,6 +5391,10 @@ to-arraybuffer@^1.0.0:
 to-fast-properties@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-1.0.3.tgz#b83571fa4d8c25b82e231b06e3a3055de4ca1a47"
+
+toggle-selection@^1.0.3:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/toggle-selection/-/toggle-selection-1.0.6.tgz#6e45b1263f2017fa0acc7d89d78b15b8bf77da32"
 
 tough-cookie@^2.3.2, tough-cookie@~2.3.0:
   version "2.3.2"

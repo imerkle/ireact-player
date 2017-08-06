@@ -3,9 +3,13 @@ class BaseStoreUpdater{
     this.store = store;
   }
   onReady = (duration) => {
+    const p = this.store.qualityArray[this.store.urlIndex];
+    const fps = (p) ? p.fps : 24;
+
     this.store.setValue({
       isReady: true,
-      tTotal: duration
+      tTotal: duration,
+      maxFrames: (duration * fps).toFixed(0)
     });
     this.store.fixTimeAfterSourceChange();
   }
@@ -17,10 +21,14 @@ class BaseStoreUpdater{
     this.store.setValue({ isBuffering: false, isError: false });
   }
   onEnded = () => {
-    this.store.setValue({
-      isEnded: true,
-      isPlaying: false
-    });
+    if(this.store.doLoop){
+      this.store.seekTo(0);
+    }else{
+      this.store.setValue({
+        isEnded: true,
+        isPlaying: false
+      });
+    }
   }
   onBuffering = (s) =>{
     this.store.setLoaded(s);

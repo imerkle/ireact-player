@@ -5,7 +5,6 @@ import {inject,observer} from 'mobx-react'
 
 import Hls from 'hls.js';
 import dashjs from 'dashjs';
-
 //import Base from './Base'
 
 const getAverageBufferedFactor = (range, depth) => {
@@ -15,6 +14,15 @@ const getAverageBufferedFactor = (range, depth) => {
     average += r.end - r.start;
   });
   return average/newRange.length;
+}
+
+const makeLinearGradient = ({color1,color2, y0 = 20, y1=45}) => {
+  const ctx = document.createElement('canvas').getContext('2d');
+  const l = ctx.createLinearGradient(0, y0, 0, y1);
+        l.addColorStop(0, color1);
+        l.addColorStop(.5, color2);
+        l.addColorStop(1, color1);
+  return l;
 }
 
 const AUDIO_EXTENSIONS = /\.(m4a|mp4a|mpga|mp2|mp2a|mp3|m2a|m3a|wav|weba|aac|oga|spx)($|\?)/i
@@ -47,8 +55,8 @@ export default class FilePlayer extends React.Component {
     ["error"].map((n)=>{
       this.player.addEventListener(n,this.onError);
     });
-
-    this.props.VideoPlayerStore.onMountEvents =
+    const { VideoPlayerStore } = this.props;
+    VideoPlayerStore.onMountEvents =
     {
       togglePlay: this.togglePlay,
       seekTo: this.seekTo,
@@ -57,7 +65,7 @@ export default class FilePlayer extends React.Component {
       setSource: this.setSource,
       setFullScreen: this.setFullScreen,
     };
-    this.load(this.url);
+    this.load(VideoPlayerStore.currentURL);
   }
 
   togglePlay = (startPlaying) => {
@@ -103,6 +111,16 @@ export default class FilePlayer extends React.Component {
   }
   onTimeupdate = () => {
     this.props.updater.onTimeUpdate(this.player.currentTime);
+
+    const {VideoPlayerStore} = this.props;
+    //some optimizations
+    if(VideoPlayerStore.showNerdStats){
+      const decodedFrames = this.getDecodedFrame();
+      VideoPlayerStore.setValue({
+        droppedFrames: this.getDroppedFrame(),
+        decodedFrames: (decodedFrames > VideoPlayerStore.maxFrames) ? VideoPlayerStore.maxFrames : decodedFrames
+      });
+    }
   }
   onEnded = () => {
     this.props.updater.onEnded();
@@ -124,7 +142,11 @@ export default class FilePlayer extends React.Component {
 
       this.props.updater.onBuffering(bufferedSeconds);
 
-      if(VideoPlayerStore.isAutoQuality){
+
+
+      if(VideoPlayerStore.isAutoQuality || VideoPlayerStore.showNerdStats){
+
+        /*Some crazy workaround i wrote so dont even fuckin bother*/
 
         /*push all buffered data*/
         const prev_b_end = this.bufferedRanges[this.bufferedRanges.length - 1].end
@@ -132,13 +154,18 @@ export default class FilePlayer extends React.Component {
           this.bufferedRanges.push({start: prev_b_end, end: b_end});
         }
 
+        const divide_factor = 1.4;
+        const bRange = getAverageBufferedFactor(this.bufferedRanges, average_depth);
+
+        const kbps = parseFloat(((bRange/seconds_factor * this.eachSecondWorthMB) * 1000).toFixed(4));
+        VideoPlayerStore.setValue({
+          kbps: kbps
+        });
+        /*Ends damn */
+
         /*modify quality every auto_modulus seconds*/
         if(this.bufferedRanges.length % auto_modulus === 0){
           let newUrlIndex;
-          const divide_factor = 1.4;
-          const bRange = getAverageBufferedFactor(this.bufferedRanges, average_depth);
-          const kbps = parseFloat(((bRange/seconds_factor * this.eachSecondWorthMB) * 1000).toFixed(4));
-          console.log(kbps);
 
           VideoPlayerStore.qualityArray.slice(0).reverse().map((n,i)=>{
             if(!newUrlIndex && kbps >= (n.size/n.duration * 1000 )/divide_factor ){
@@ -181,19 +208,15 @@ export default class FilePlayer extends React.Component {
 
     const qualityArray = VideoPlayerStore.qualityArray;
     const urlIndex = VideoPlayerStore.urlIndex;
-    const url = VideoPlayerStore.currentUrl;
-    this.url = url;
 
-    const doLoop = VideoPlayerStore.doLoop;
-
-    const useAudio = AUDIO_EXTENSIONS.test(url)
+    const useAudio = AUDIO_EXTENSIONS.test(VideoPlayerStore.currentURL)
     const Element = useAudio ? 'audio' : 'video'
 
     return (
       <Element
         ref={this.ref}
         preload='auto'
-        loop={doLoop}
+        loop={VideoPlayerStore.doLoop}
       >
         {this.renderSource(qualityArray[urlIndex])}
       </Element>

@@ -47,9 +47,16 @@ class VideoPlayerStore{
   @observable isCaptionOn = false;
   @observable canBeCaption = true;
 
+  @observable droppedFrames = 0;
+  @observable decodedFrames = 0;
+  @observable maxFrames = 0;
+  @observable kbps = 0;
+  @observable showNerdStats = false;
 
 
-  constructor({url,_prefix="ut",vCurrent=1.0,autoQuality=true,annotation_url = null,caption_url = null} = {}){
+  constructor(
+    {url,_prefix="ut",vCurrent=1.0,autoQuality=true,annotation_url = null,caption_url = null}
+  ){
     this.player = null;
     if(!(url instanceof Array)){
       url = [{src: url,value: "auto",label: "Auto",default: true}];
@@ -74,8 +81,6 @@ class VideoPlayerStore{
         return;
       }
     });
-
-
   }
   @action setValue = (stores) => {
     let self = this;

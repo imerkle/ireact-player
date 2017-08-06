@@ -4,21 +4,46 @@ import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
-import { List, ListItemIcon, IconButton,Icon } from 'material-ui';
-import { Switch ,ListItem, ListItemText, FaDiv, Fa } from 'material-son';
+import {  Switch, List, ListItemIcon, IconButton,Icon } from 'material-ui';
+import { createStyleSheet, withStyles } from 'material-ui/styles';
+
+import { ListItem, ListItemText, FaDiv, Fa } from 'material-son';
 
 import findIndex from 'lodash.findindex';
 
-
-const toggleSwichListItem = (label ,store, index) => {
+const styleSheet = createStyleSheet('MsonSwitch',theme => ({
+   bar: {
+   },
+   default: {
+     color: theme.vplayer.disabledPrimary,
+      '& + $bar': {
+        backgroundColor: theme.vplayer.disabledSecondary,
+      }
+    },
+    checked: {
+      color: theme.vplayer.secondaryColor,
+      '& + $bar': {
+        backgroundColor: theme.vplayer.primaryColor,
+        opacity: 1,
+      },
+    },
+}));
+const toggleSwichListItem = (classes, label ,store, index) => {
   return (
     <ListItem button onClick={(e)=>{ store[index] = !store[index] }}>
       <ListItemText primary={label} />
-      <Switch checked={store[index]} />
+      <Switch
+        classes={{
+          bar: classes.bar,
+          default: classes.default,
+          checked: classes.checked,
+        }}
+        checked={store[index]} />
     </ListItem>
   );
 }
 
+@withStyles(styleSheet)
 @inject('VideoPlayerStore') @observer
 class Settings extends React.Component{
 
@@ -26,6 +51,7 @@ class Settings extends React.Component{
 
   static propTypes = {
     primaryColor: PropTypes.string.isRequired,
+    classes: PropTypes.object.isRequired,
   }
   constructor(props){
     super(props);
@@ -50,7 +76,7 @@ class Settings extends React.Component{
     };
   }
   render(){
-    const {VideoPlayerStore} = this.props;
+    const {VideoPlayerStore, classes} = this.props;
     const {_prefix} = VideoPlayerStore;
 
     const maxHeight = 400;
@@ -91,8 +117,8 @@ class Settings extends React.Component{
             <Icon>settings</Icon>
           </IconButton>
             <List className={`${_prefix}-settingsList ${(VideoPlayerStore.isSettingsOpen) ? "" : "invisible"}`} style={{maxHeight: `${maxHeight}px`}}>
-              {(VideoPlayerStore.canBeAnnotation) ? toggleSwichListItem('Annotation' ,VideoPlayerStore, 'isAnnotation') : "" }
-              {(VideoPlayerStore.canBeAutoQuality) ? toggleSwichListItem('Auto Quality' ,VideoPlayerStore, 'isAutoQuality') : "" }
+              {(VideoPlayerStore.canBeAnnotation) ? toggleSwichListItem(classes,'Annotation' ,VideoPlayerStore, 'isAnnotation') : "" }
+              {(VideoPlayerStore.canBeAutoQuality) ? toggleSwichListItem(classes,'Auto Quality' ,VideoPlayerStore, 'isAutoQuality') : "" }
               <ListItem
                 button
                 nestedItems={this.menuList(speedArray,this.chooseSpeed,VideoPlayerStore.speed)}

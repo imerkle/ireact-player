@@ -20,7 +20,6 @@ module.exports = {
   resolve: {
     alias: {
       docs: path.resolve(__dirname, '../docs'),
-      'material-son': path.resolve(__dirname, '../material-son'),
       'utube': path.resolve(__dirname, '../src'),
       //'material-ui-icons': path.resolve(__dirname, '../packages/material-ui-icons/src'),
     },

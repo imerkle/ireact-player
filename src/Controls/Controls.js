@@ -25,16 +25,16 @@ const makeButton = (icon,handleClick,tooltip="") => {
 }
 
 const styleSheet = createStyleSheet(SHEET_NAME.CONTROLS,theme => ({
-    controlButton : {
-       alignItems: "center",
-  	   zIndex: 1,
-       padding: "0px 10px",
-    },
-    rightControl: {
-      display: "flex",
-    	justifyContent: "flex-end",
-      marginRight: "10px",
-    }
+  controlButton : {
+     alignItems: "center",
+     zIndex: 1,
+     padding: "0px 10px",
+  },
+  rightControl: {
+    display: "flex",
+  	justifyContent: "flex-end",
+    marginRight: "10px",
+  }
 }));
 
 @withStyles(styleSheet)
@@ -44,7 +44,7 @@ class Controls extends React.Component{
     super(props);
   }
   render(){
-    let {VideoPlayerStore} = this.props;
+    let {VideoPlayerStore, classes} = this.props;
     let _prefix = VideoPlayerStore._prefix;
 
 
@@ -53,13 +53,13 @@ class Controls extends React.Component{
 
         <Rails />
         {/*Here put the button icons*/}
-        <FaDiv fa className={`${this.props.classes.controlButton}`}>
+        <FaDiv fa className={`${classes.controlButton}`}>
 
           <PlayPause makeButton={makeButton} handlePlayPause={this.props.handlePlayPause}/>
           <Volume makeButton={makeButton} />
           <TimeCode current={VideoPlayerStore.tCurrent} total={VideoPlayerStore.tTotal} separator={this.props.separator} />
 
-          <Fa fs className={`${this.props.classes.rightControl}`}>
+          <Fa fs className={`${classes.rightControl}`}>
             {
               (VideoPlayerStore.canBeCaption) ?
               <ClosedCaption makeButton={makeButton} _prefix={VideoPlayerStore._prefix} isCaptionOn={VideoPlayerStore.isCaptionOn} onCaptionClick={()=>{VideoPlayerStore.isCaptionOn = !VideoPlayerStore.isCaptionOn}}/>

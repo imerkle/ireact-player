@@ -258,11 +258,7 @@ onBuffer = () => {
      this.container = container
    }
    render () {
-     return (
-       <div>
-         <div ref={this.ref} />
-       </div>
-     )
+     return (<div ref={this.ref} />)
    }
 }
 export default YouTube;

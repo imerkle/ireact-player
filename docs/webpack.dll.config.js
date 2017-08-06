@@ -5,7 +5,7 @@ const packageJson = require('./package.json');
 const packageJsonSrc = require('../package.json');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const excludedDeps = ['lodash', 'recompose', 'object-assign', 'material-ui-icons', 'babel-runtime'];
+const excludedDeps = ['babel-runtime'];
 
 const deps = [
   'react-hot-loader/index',
