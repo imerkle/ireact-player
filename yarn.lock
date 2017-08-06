@@ -3496,9 +3496,9 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
-material-son@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/material-son/-/material-son-1.4.1.tgz#e747d2267d3929d63e868883a2f958c47540f2c2"
+material-son@^1.4.3:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/material-son/-/material-son-1.4.3.tgz#82a66c980b643fd3ddf71e2338256819c7777ec2"
   dependencies:
     classnames "^2.2.5"
     global "^4.3.2"
@@ -4679,9 +4679,9 @@ react-addons-test-utils@^15.6.0:
   version "15.6.0"
   resolved "https://registry.yarnpkg.com/react-addons-test-utils/-/react-addons-test-utils-15.6.0.tgz#062d36117fe8d18f3ba5e06eb33383b0b85ea5b9"
 
-react-contextmenu-material@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/react-contextmenu-material/-/react-contextmenu-material-1.0.4.tgz#46d8dbacdbc43e837d2e4162fa215aba067dd69e"
+react-contextmenu-material@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/react-contextmenu-material/-/react-contextmenu-material-1.0.6.tgz#5f4d13d13e9f3cec577bf32a134a50961fa9a634"
   dependencies:
     classnames "^2.2.5"
     object-assign "^4.1.0"

@@ -44,28 +44,28 @@ class Controls extends React.Component{
     super(props);
   }
   render(){
-    let {VideoPlayerStore, classes} = this.props;
+    let { VideoPlayerStore, classes, thumbnail_url } = this.props;
     let _prefix = VideoPlayerStore._prefix;
 
 
     return(
-      <FaDiv c className={`${_prefix}-controls`} ref={(ref)=>{this.controls = ref}}>
+      <FaDiv c>
 
-        <Rails />
+        <Rails thumbnail_url={thumbnail_url}/>
         {/*Here put the button icons*/}
-        <FaDiv fa className={`${classes.controlButton}`}>
+        <FaDiv fa className={classes.controlButton}>
 
           <PlayPause makeButton={makeButton} handlePlayPause={this.props.handlePlayPause}/>
           <Volume makeButton={makeButton} />
           <TimeCode current={VideoPlayerStore.tCurrent} total={VideoPlayerStore.tTotal} separator={this.props.separator} />
 
-          <Fa fs className={`${classes.rightControl}`}>
+          <Fa fs className={classes.rightControl}>
             {
               (VideoPlayerStore.canBeCaption) ?
               <ClosedCaption makeButton={makeButton} _prefix={VideoPlayerStore._prefix} isCaptionOn={VideoPlayerStore.isCaptionOn} onCaptionClick={()=>{VideoPlayerStore.isCaptionOn = !VideoPlayerStore.isCaptionOn}}/>
               : ""
             }
-            <Settings primaryColor={this.props.primaryColor} />
+            <Settings />
             <WideScreen makeButton={makeButton} />
             <FullScreen makeButton={makeButton} />
           </Fa>

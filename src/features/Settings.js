@@ -10,6 +10,7 @@ import { createStyleSheet, withStyles } from 'material-ui/styles';
 import { ListItem, ListItemText, FaDiv, Fa } from 'material-son';
 
 import findIndex from 'lodash.findindex';
+import cx from 'classnames';
 
 const styleSheet = createStyleSheet('MsonSwitch',theme => ({
    bar: {
@@ -27,11 +28,28 @@ const styleSheet = createStyleSheet('MsonSwitch',theme => ({
         opacity: 1,
       },
     },
+    list: {
+      background: 'rgba(0, 0, 0, 0.85)',
+      zIndex: '100',
+    	position: 'absolute',
+    	bottom: '100%',
+    	right: '10px',
+    	width: '230px',
+      maxHeight: '400',
+    },
+    text: {
+      fontSize: '12px',
+    },
+    root_text:{
+      fontSize: '13px',
+    },
 }));
 const toggleSwichListItem = (classes, label ,store, index) => {
   return (
     <ListItem button onClick={(e)=>{ store[index] = !store[index] }}>
-      <ListItemText primary={label} />
+      <ListItemText
+        primary={label}
+        classes={{text: classes.root_text}} />
       <Switch
         classes={{
           bar: classes.bar,
@@ -50,25 +68,12 @@ class Settings extends React.Component{
   @observable settingsListOpen  = false;
 
   static propTypes = {
-    primaryColor: PropTypes.string.isRequired,
     classes: PropTypes.object.isRequired,
   }
   constructor(props){
     super(props);
 
     this.styles = {
-      thumbOff: {
-        backgroundColor: '#bdbdbd',
-      },
-      trackOff: {
-        backgroundColor: '#5e5e5e',
-      },
-      thumbSwitched: {
-        backgroundColor: '#f8f8f8',
-      },
-      trackSwitched: {
-        backgroundColor: this.props.primaryColor,
-      },
       labelStyle: {
         color: '#cccaca',
         fontSize: '13px'
@@ -78,8 +83,6 @@ class Settings extends React.Component{
   render(){
     const {VideoPlayerStore, classes} = this.props;
     const {_prefix} = VideoPlayerStore;
-
-    const maxHeight = 400;
     const speedArray = [
       {value: 0.25},
       {value: 0.5},
@@ -93,13 +96,6 @@ class Settings extends React.Component{
     const currentQuality = qualityArray[VideoPlayerStore.urlIndex];
     const qualityLabel = `${(currentQuality.label || currentQuality.value+'p')} ${(currentQuality.fps && currentQuality.fps > 30) ? currentQuality.fps : ( (currentQuality.suffix) ? currentQuality.suffix : "" )}`;
 
-    const toggleStyle = {
-      thumbStyle: styles.thumbOff,
-      trackStyle: styles.trackOff,
-      thumbSwitchedStyle: styles.thumbSwitched,
-      trackSwitchedStyle: styles.trackSwitched,
-      labelStyle: styles.labelStyle
-    }
 
     const currentSpeedIndex = speedArray[findIndex(speedArray,(o)=>{ return o.value == VideoPlayerStore.speed })];
     {/*settings*/}
@@ -116,14 +112,20 @@ class Settings extends React.Component{
           }}>
             <Icon>settings</Icon>
           </IconButton>
-            <List className={`${_prefix}-settingsList ${(VideoPlayerStore.isSettingsOpen) ? "" : "invisible"}`} style={{maxHeight: `${maxHeight}px`}}>
+            <List className={cx(
+              classes.list,
+              {"invisible": !VideoPlayerStore.isSettingsOpen }
+            )}>
               {(VideoPlayerStore.canBeAnnotation) ? toggleSwichListItem(classes,'Annotation' ,VideoPlayerStore, 'isAnnotation') : "" }
               {(VideoPlayerStore.canBeAutoQuality) ? toggleSwichListItem(classes,'Auto Quality' ,VideoPlayerStore, 'isAutoQuality') : "" }
               <ListItem
                 button
                 nestedItems={this.menuList(speedArray,this.chooseSpeed,VideoPlayerStore.speed)}
               >
-                <ListItemText primary="Speed" secondary={currentSpeedIndex.label || currentSpeedIndex.value} />
+                <ListItemText
+                  primary="Speed"
+                  secondary={currentSpeedIndex.label || currentSpeedIndex.value}
+                  classes={{text: classes.root_text}} />
               </ListItem>
               {
                 (qualityArray.length > 1) ?
@@ -131,7 +133,10 @@ class Settings extends React.Component{
                       button
                       nestedItems={this.qualityList(qualityArray,this.chooseQuality,VideoPlayerStore.urlIndex)}
                       >
-                    <ListItemText primary="Quality" secondary={qualityLabel} />
+                    <ListItemText
+                      primary="Quality"
+                      secondary={qualityLabel}
+                      classes={{text: classes.root_text}} />
                   </ListItem> : ""
                 }
             </List>
@@ -139,43 +144,45 @@ class Settings extends React.Component{
     );
   }
   settingsCloseDoc  = (e) => {
-    const {VideoPlayerStore} = this.props;
-    const slist = e.target.closest(`.${VideoPlayerStore._prefix}-settingsList`);
+    const { VideoPlayerStore, classes } = this.props;
+    const slist = e.target.closest(`.${classes.list}`);
     if(!slist){
       VideoPlayerStore.isSettingsOpen = false;
       document.removeEventListener('click',this.settingsCloseDoc);
     }
   }
   menuList = (itemArray,chooseVal,currentVal) => {
+    const { classes } = this.props;
     return itemArray.map((a,i)=>{
       return (
         <ListItem
         button
-        style={{...this.styles.labelStyle}}
         key={i}
-        onTouchTap={()=>{
+        onClick={()=>{
           chooseVal(a.value)
         }}
       >
-        <ListItemText secondary={a.label || a.value} />
+        <ListItemText secondary={a.label || a.value} classes={{text: classes.text}} />
         <ListItemIcon><Icon>{(currentVal == a.value) ? "check" : ""}</Icon></ListItemIcon>
       </ListItem>
     )
     });
   }
   qualityList = (itemArray,chooseVal,urlIndex) => {
+    const { classes } = this.props;
     const currentVal = itemArray[urlIndex].value;
+
     return itemArray.map((a,i)=>{
       return (
         <ListItem
         key={i}
         button
         style={{...this.styles.labelStyle}}
-        onTouchTap={()=>{
+        onClick={()=>{
           chooseVal(i)
         }}
       >
-        <ListItemText primary={`${(a.label || a.value+'p')}`} secondary={(a.fps && a.fps > 30) ? a.fps : ( (a.suffix) ?  a.suffix : "" ) } />
+        <ListItemText primary={`${(a.label || a.value+'p')}`} secondary={(a.fps && a.fps > 30) ? a.fps : ( (a.suffix) ?  a.suffix : "" ) } classes={{text: classes.text}} />
         <ListItemIcon><Icon>{(currentVal == a.value) ? "check" : ""}</Icon></ListItemIcon>
       </ListItem>
     )

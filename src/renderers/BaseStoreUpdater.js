@@ -1,6 +1,7 @@
 class BaseStoreUpdater{
   constructor({store}={}){
     this.store = store;
+    this.autoPlayed = false;
   }
   onReady = (duration) => {
     const p = this.store.qualityArray[this.store.urlIndex];
@@ -12,6 +13,10 @@ class BaseStoreUpdater{
       maxFrames: (duration * fps).toFixed(0)
     });
     this.store.fixTimeAfterSourceChange();
+    if(!this.autoPlayed && this.store.autoplay){
+      this.autoPlayed = true;
+      this.store.togglePlay();
+    }
   }
   onWaiting = () => {
     this.store.setValue({ isBuffering: true });

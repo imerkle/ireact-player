@@ -25,7 +25,7 @@ class Volume extends React.Component{
           {this.props.makeButton((VideoPlayerStore.vCurrent == 0 ) ? 'volume_off' : (VideoPlayerStore.vCurrent > 0.5) ? "volume_up" :'volume_down',() =>{this.handleVolumeToggle()} )}
         </Fa>
         <Fa fs className={`${_prefix}-volume-slider-container ${(this.hideSlider) ? "hideSlider": ""}`}>
-          <Slider _prefix={_prefix} onMove={this.onMoveVolume} onDown={this.onMoveVolume} isReady={VideoPlayerStore.isReady} value={VideoPlayerStore.vCurrent} />
+          <Slider _prefix={_prefix} onMove={this.onMoveVolume} onDown={this.onMoveVolume} isReady={VideoPlayerStore.isReady} value={VideoPlayerStore.vCurrent} middleMouse />
         </Fa>
       </FaDiv>
     );

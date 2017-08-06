@@ -37,11 +37,6 @@ body{
 	transform: none!important;
   position: inherit!important;
 }
-
-
-.ut-player{
-	background: #f8f8f8;
-}
 .ut-player,.ut-layers {
     width: 100%;
     height: 100%;
@@ -159,16 +154,6 @@ body{
 	background: var(--primaryColorLight);
 }
 
-.ut-control-bg{
-	position: absolute;
-	bottom: 0;
-	height: 100px;
-	width: 100%;
-	background-image: url('https://i.imgur.com/uMopswI.png');
-	background-repeat: repeat-x;
-	pointer-events: none;
-	background-position: bottom;
-}
 @keyframes playpauseFadeAnimate {
     0% {
         display: none;
@@ -202,24 +187,4 @@ body{
 }
 .ut-menulabel,.ut-menucontent{
 	color: #cccaca;
-}
-
-.ut-settingsList{
-	background: rgba(0, 0, 0, 0.85);
-  z-index: 100;
-	position: absolute;
-	bottom: 100%;
-	right: 10px;
-	width: 230px;
-}
-
-.ut-buffer-layer{
-	width: 100%;
-	height: 100%;
-	pointer-events: none;
-}
-
-.ut-errortv-layer{
-	width: 100%;
-	height: 100%;
 }

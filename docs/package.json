@@ -33,8 +33,7 @@
     "webpack-dev-server": "^2.5.0"
   },
   "dependencies": {
-    "marked": "^0.3.6",
-    "prismjs": "^1.6.0"
+    "react-live": "^1.7.0"
   },
   "author": "dsslimshaddy",
   "license": "MIT"

@@ -16,13 +16,32 @@ import VideoPlayerStore from '../stores/VideoPlayerStore.js';
 import BaseStoreUpdater from '../renderers/BaseStoreUpdater.js';
 import getVendor from '../utils/getVendor.js';
 import { stToggle } from '../utils/dom.js';
-
+import cx from 'classnames';
 
 const secondaryColor = '#f8f8f8';
+const black = 'rgba(0, 0, 0, 0.8)';
 
+const primaryPalette = {
+    50: '#fde6e7',
+    100: '#fbc0c2',
+    200: '#f8969a',
+    300: '#f56b72',
+    400: '#f34c53',
+    500: '#f12c35',
+    600: '#ef2730',
+    700: '#ed2128',
+    800: '#eb1b22',
+    900: '#e71016',
+    A100: '#ffffff',
+    A200: '#ffe0e1',
+    A400: '#ffadaf',
+    A700: '#ff9496',
+    'contrastDefaultColor': 'light',
+};
 const theme = createMuiTheme({
   palette: createPalette({
     type: 'dark', // Switching the dark mode on is a single property value change.
+    primary: primaryPalette
   }),
   vplayer: {
     primaryColor: '#f12c35',
@@ -30,6 +49,7 @@ const theme = createMuiTheme({
     secondaryColor: secondaryColor,
     disabledPrimary: '#bdbdbd',
     disabledSecondary: '#5e5e5e',
+    black: black,
   }
 });
 
@@ -43,8 +63,24 @@ const hideBottom = {
   transition: '.15s linear bottom',
 };
 const styleSheet = createStyleSheet('MsonVideoPlayer', theme => ({
+  player: {
+    background: '#141414',
+  },
+  fullHW: {
+    width: '100%',
+  	height: '100%',
+  },
+  layers: {
+    '& > div': {
+      position: 'absolute',
+    }
+  },
+  layer_root: {
+    position: 'relative',
+    overflow: 'hidden',
+  },
   context_root: {
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backgroundColor: black,
     zIndex: 10,
     minWidth: '250px',
   },
@@ -66,8 +102,6 @@ const styleSheet = createStyleSheet('MsonVideoPlayer', theme => ({
     }
   },
   videoLayer: {
-    height: '100%',
-    width: '100%',
     '& video': {
       height: '100%',
       width: '100%',
@@ -94,8 +128,6 @@ const styleSheet = createStyleSheet('MsonVideoPlayer', theme => ({
   playpauseLayer: {
     top: '0',
     position: 'absolute',
-    height: '100%',
-    width: '100%',
     zIndex: '1',
   	display: 'flex',
   	justifyContent: 'center',
@@ -118,7 +150,22 @@ const styleSheet = createStyleSheet('MsonVideoPlayer', theme => ({
     height: 24,
     padding: 0,
     color: secondaryColor,
-  }
+  },
+  buffer: {
+    pointerEvents: 'none',
+  },
+  midIcon: {
+    fontSize: '80px',
+    opacity: '.7',
+    transition: '.15s linear opacity',
+    color: secondaryColor,
+  },
+  midIconContainer: {
+    cursor: 'pointer',
+    '&:hover $midIcon':{
+      opacity: '1',
+    }
+  },
 }));
 
 const addParam = (url, param, value) => {
@@ -151,16 +198,21 @@ const randomGenerate = (minimum = 1, maximum = 1000) => {
 class VideoPlayer extends React.Component{
   @observable snackBarOpen = false;
   @observable snackBarMessage = "";
+  @observable initialized = false;
+  @observable autoplay = false;
 
   static defaultProps = {
     separator: "/",
-    primaryColor: '#f12c35',
     bounds: "body",
-    autoQuality: true,
+    isAutoQuality: true,
     annotation_url: "",
     caption_url: "",
     extenstionLayers: [],
     stats: [],
+    minWidth: 460,
+    minHeight: 350,
+    autoplay: false,
+    poster: "",
   }
   static propTypes = {
     src: PropTypes.oneOfType([
@@ -170,39 +222,80 @@ class VideoPlayer extends React.Component{
     classes:  PropTypes.object.isRequired,
     stats:  PropTypes.array,
     separator:  PropTypes.string,
-    primaryColor:  PropTypes.string,
     bounds: PropTypes.string,
-    autoQuality: PropTypes.bool,
+    minWidth: PropTypes.number,
+    minHeight: PropTypes.number,
+    isAutoQuality: PropTypes.bool,
     caption_url: PropTypes.string,
     annotation_url: PropTypes.string,
     extenstionLayers: PropTypes.array,
+    autoplay: PropTypes.bool,
+    poster: PropTypes.string,
   }
 
   constructor(props){
     super(props);
-    let {src} = this.props;
 
-    this.VideoPlayerStore = new VideoPlayerStore({url: src,autoQuality: this.props.autoQuality,annotation_url: this.props.annotation_url,caption_url: this.props.caption_url});
 
+    const { autoplay, poster }  = props;
+    if(!(!autoplay && poster && !this.initialized)){
+      this.VideoPlayerStore = {};
+      this.autoplay = props.autoplay;
+      this.initializeStore(props);
+    }
+  }
+  componentWillReceiveProps(nextProps){
+     //this.initializeStore(nextProps);
+     //this.VideoPlayerStore.togglePlay(false,true);
+  }
+  initializeStore(props){
+    let { src, isAutoQuality, annotation_url, caption_url, prefix } = props;
+    this.VideoPlayerStore = new VideoPlayerStore({
+      url: src,
+      isAutoQuality: isAutoQuality,
+      annotation_url: annotation_url,
+      caption_url: caption_url,
+      autoplay: this.autoplay
+    });
+    this.onContruct({prefix});
+  }
+  onContruct({prefix}){
     let updater = new BaseStoreUpdater({store: this.VideoPlayerStore});
-
     this.vendorProps = {
-      updater: updater
+      updater: updater,
     };
-
-    this.contextMenuId = `${props.prefix}-${randomGenerate()}-${Math.round((new Date()).getTime() / 1000)}`;
+    this.contextMenuId = `${prefix}-${randomGenerate()}-${Math.round((new Date()).getTime() / 1000)}`;
   }
   render(){
+    const { classes, stats, autoplay, poster, thumbnail_url }  = this.props;
+    if(!autoplay && poster && !this.initialized){
+      return (
+        <Div className={cx(classes.fullHW)}
+          style={{
+            background: `url(${poster})`,
+            ...sty
+          }}
+          onClick={()=>{
+            this.initialized = true;
+            this.autoplay = true;
+            this.initializeStore(this.props);
+          }}
+          >
+          <FaDiv vcenter hcenter className={cx(classes.fullHW,classes.midIconContainer)}>
+            <IconButton><Icon className={classes.midIcon}>play_arrow</Icon></IconButton>
+          </FaDiv>
+        </Div>
+      );
+    }
     const VideoPlayerStore = this.VideoPlayerStore;
     const src = VideoPlayerStore.currentURL;
 
     const { vendor, component } = getVendor({src: src,props: this.vendorProps});
-    const minWidth = 460;
-    const minHeight = 350;
+    const minWidth = this.props.minWidth;
+    const minHeight = this.props.minHeight;
 
     const _prefix = VideoPlayerStore._prefix;
     const playpause = (VideoPlayerStore.isPlaying && VideoPlayerStore.tCurrent > 0 ) ? 'play_arrow' : 'pause';
-    const beginanimate = (VideoPlayerStore.beginanimate) ? "beginanimate" : "";
     const fscl = (VideoPlayerStore.isFullScreen) ?  "isFullScreen" : "";
 
     let render_out;
@@ -219,18 +312,39 @@ class VideoPlayer extends React.Component{
     };
 
     const {width: w,height: h, ...sty} = this.props.style;
-    const { classes, stats }  = this.props;
 
     render_out = (
     <MuiThemeProvider theme={theme}>
-     <Div>
-      <Rnd default={{x: 0,y: 0,width: w, height: h}} className={`${_prefix}-rnd ${_prefix}-screen-${VideoPlayerStore.screenType}`} disableDragging={!rndBool} enableResizing={enableResizing} bounds={this.props.bounds} dragHandlerClassName={`.${_prefix}-dragger`} minWidth={minWidth} minHeight={minHeight}>
+     <Div className={cx(classes.fullHW)}>
+      <Rnd
+        default={{x: 0,y: 0,width: w, height: h}}
+        className={
+          cx(`${_prefix}-rnd`,
+            `${_prefix}-screen-${VideoPlayerStore.screenType}`
+          )
+        }
+        disableDragging={!rndBool}
+        enableResizing={enableResizing}
+        bounds={this.props.bounds}
+        dragHandlerClassName={`.${_prefix}-dragger`}
+        minWidth={minWidth}
+        minHeight={minHeight}
+      >
       <ContextMenuTrigger id={this.contextMenuId} style={{height: '100%',width: '100%'}}>
         <FaDiv className={`${_prefix}-dragger`}>
           {makeButton(classes ,'close',(e)=>{this.handleScreenType(e)})}
         </FaDiv>
         <Div
-          className={`${_prefix}-player ${fscl} ${(!VideoPlayerStore.isPlaying || VideoPlayerStore.isSettingsOpen || VideoPlayerStore.isOverPlayer) ? "showControls" : "hideControls"} `}
+          className={
+            cx(`${_prefix}-player`,
+              classes.player,
+              classes.layer_root,
+              classes.fullHW,
+              fscl,
+              { "showControls": (!VideoPlayerStore.isPlaying || VideoPlayerStore.isSettingsOpen || VideoPlayerStore.isOverPlayer)},
+              { "hideControls": !(!VideoPlayerStore.isPlaying || VideoPlayerStore.isSettingsOpen || VideoPlayerStore.isOverPlayer)},
+            )
+          }
           style={{...sty}}
           onMouseEnter={()=>{this.onOver(true)}}
           onMouseLeave={()=>{this.onOver(false)}}
@@ -242,16 +356,23 @@ class VideoPlayer extends React.Component{
           }}
           >
           <Provider VideoPlayerStore={VideoPlayerStore}>
-            <Div className={`${_prefix}-layers`}>
-                <Div className={`${classes.videoLayer}`}>
+            <Div className={cx(
+              classes.layers,
+              classes.layer_root,
+              classes.fullHW
+            )}>
+                <Div className={cx(
+                  classes.videoLayer,
+                  classes.fullHW
+                )}>
                     {component}
                 </Div>
-                <Div className={`${_prefix}-errortv-layer`}>
+                <Div className={cx(classes.fullHW)}>
                   <ErrorTv _prefix={VideoPlayerStore._prefix} isError={VideoPlayerStore.isError} />
                 </Div>
                 {
                   (VideoPlayerStore.showNerdStats) ?
-                <Div className={`${_prefix}-nerds-layer`}>
+                <Div>
                     <Paper>
                       <ul className={classes.nerdUL}>
                         {
@@ -266,8 +387,13 @@ class VideoPlayer extends React.Component{
                 </Div>
                   : ""
                 }
-                <Div className={`${_prefix}-playpause-layer ${classes.playpauseLayer}`}>
-                  <Icon className={`playpauseanimate ${classes.playpauseanimate} ${beginanimate}`} style={{color: 'contrast'}}>{playpause}</Icon>
+                <Div className={cx(
+                  classes.playpauseLayer,
+                  classes.fullHW,
+                )}>
+                  <Icon className={cx(classes.playpauseanimate,
+                    {"beginanimate": VideoPlayerStore.beginanimate}
+                  )}>{playpause}</Icon>
                 </Div>
                 {
                   (this.props.annotation_url) ?
@@ -292,12 +418,18 @@ class VideoPlayer extends React.Component{
                    /> : ""
                 }
                 {/*Here put the control background*/}
-                <Div className={`${_prefix}-control-bg ${classes.controlBg}`}></Div>
+                <Div className={cx(classes.controlBg)}></Div>
 
                 <Div className={`${_prefix}-controls-layer ${classes.controlsLayer} ${_prefix}-unhinder`}>
-                  <Controls primaryColor={this.props.primaryColor} handlePlayPause={this.handlePlayPause} separator={this.props.separator}/>
+                  <Controls
+                    handlePlayPause={this.handlePlayPause}
+                    separator={this.props.separator}
+                    thumbnail_url={thumbnail_url} />
                 </Div>
-                <Div className={`${_prefix}-buffer-layer`}>
+                <Div className={cx(
+                  classes.fullHW,
+                  classes.buffer
+                )}>
                   {(VideoPlayerStore.isBuffering || !VideoPlayerStore.isReady) ? <LinearIndeterminate /> : "" }
                 </Div>
                 {this.extenstionLayersPrint(_prefix)}

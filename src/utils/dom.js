@@ -1,3 +1,8 @@
+export const limitBetween = (n, min, max) => {
+  if(n < min) n = min;
+  if(n > max) n = max;
+  return n;
+}
 export const getCueKeys = (cues) => {
   cues.map((o,i)=>{
         o.index = i;
