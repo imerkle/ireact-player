@@ -13,7 +13,7 @@ module.exports = {
       },
     }),
     new ExtractTextPlugin({
-      filename : path.resolve(__dirname, 'build','darkstyles.css'),
+      filename : 'darkstyles.css',
       allChunks : true
     })
   ],
