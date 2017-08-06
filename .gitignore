@@ -1,5 +1,5 @@
 # App artifacts
-build
+/build
 /_build
 /db
 /deps
