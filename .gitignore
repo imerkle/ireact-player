@@ -1,4 +1,5 @@
 # App artifacts
+build
 /_build
 /db
 /deps
@@ -22,4 +23,4 @@ erl_crash.dump
 #docs
 #/docs/build
 /docs/assets
-#/docs/node_modules
+/docs/node_modules
