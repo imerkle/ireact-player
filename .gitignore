@@ -20,6 +20,6 @@ erl_crash.dump
 /babel_cache
 
 #docs
-/docs/build
+#/docs/build
 /docs/assets
-/docs/node_modules
+#/docs/node_modules
