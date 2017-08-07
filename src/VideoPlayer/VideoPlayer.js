@@ -50,6 +50,31 @@ const theme = createMuiTheme({
     disabledPrimary: '#bdbdbd',
     disabledSecondary: '#5e5e5e',
     black: black,
+
+    themePrimary: '#FFF',
+    searchBarWidthClosed: '150px',
+    searchBarWidthOpened: '250px',
+
+    loadedColor: 'rgba(255, 255, 255, .3)',
+    hoveredColor: 'rgba(255,255,255,.5)',
+    negativehoveredColor: 'rgba(0,0,0,.2)',
+    totalColor: 'rgba(255, 255, 255, 0.3)',
+
+    primaryColorVolume: '#f8f8f8',
+    primaryColorLightVolume: '#ffffff',
+
+    totalheight: '5px',
+    totalheightCompressed: '3px',
+    handleDimension: '5px',
+    handleTop: '-4px',
+
+    totalheightVolume: '3px',
+    handleBorder: '4px',
+    handleBorderVolume: '3px',
+
+    widthVolume: '80px',
+    compressedWidthVolume: '30px',
+    volumeTransitionTime: '.05s',
   }
 });
 
@@ -84,12 +109,16 @@ const styleSheet = createStyleSheet('MsonVideoPlayer', theme => ({
     zIndex: 10,
     minWidth: '250px',
   },
+  nerdPaper: {
+    backgroundColor: black,
+    margin: '15px',
+  },
   nerdUL: {
     listStyle: 'none',
     padding: '5px',
     color: secondaryColor,
     fontSize: '12px',
-    padding: '21px',
+    padding: '10px 20px',
     '& li': {
       padding: '2px',
       '& label': {
@@ -166,7 +195,56 @@ const styleSheet = createStyleSheet('MsonVideoPlayer', theme => ({
       opacity: '1',
     }
   },
+  dragger: {
+    background: black,
+  	flexDirection: 'row-reverse',
+    padding: '6px 0px',
+  	cursor: 'pointer',
+    visibility: 'hidden',
+  },
+  screen_0: {},
+  screen_1:{
+    width: '100%',
+  	position: 'relative',
+  },
+  screen_2: {},
+  rndfix: {
+    transform: 'none!important',
+    position: 'inherit!important',
+  },
+  rnd: {
+    cursor : 'default!important',
+    '&$screen_2':{
+      '& > div':{
+        display: 'flex',
+        flexDirection: 'row',
+      },
+      '& $dragger': {
+        visibility: 'visible',
+      },
+    },
+    '&$screen_1': {
+      extend: 'rndfix',
+      width: '100%!important',
+      '& > div':{
+        width: '100%!important',
+      },
+    },
+    '&$screen_1': {
+      extend: 'rndfix',
+    },
+  },
+  isFullScreen: {
+    height: '100%!important',
+  	width: '100%!important',
+  },
+  showControls: {
+    '& $controlsLayer':{
+      bottom: '0',
+    }
+  },
 }));
+
 
 const addParam = (url, param, value) => {
    var a = document.createElement('a'), regex = /(?:\?|&amp;|&)+([^=]+)(?:=([^&]*))*/g;
@@ -213,6 +291,7 @@ class VideoPlayer extends React.Component{
     minHeight: 350,
     autoplay: false,
     poster: "",
+    holdToDisplay: -1,
   }
   static propTypes = {
     src: PropTypes.oneOfType([
@@ -221,6 +300,7 @@ class VideoPlayer extends React.Component{
     ]),
     classes:  PropTypes.object.isRequired,
     stats:  PropTypes.array,
+    holdToDisplay: PropTypes.number,
     separator:  PropTypes.string,
     bounds: PropTypes.string,
     minWidth: PropTypes.number,
@@ -267,7 +347,7 @@ class VideoPlayer extends React.Component{
     this.contextMenuId = `${prefix}-${randomGenerate()}-${Math.round((new Date()).getTime() / 1000)}`;
   }
   render(){
-    const { classes, stats, autoplay, poster, thumbnail_url }  = this.props;
+    const { classes, stats, autoplay, poster, thumbnail_url, holdToDisplay }  = this.props;
     if(!autoplay && poster && !this.initialized){
       return (
         <Div className={cx(classes.fullHW)}
@@ -296,7 +376,6 @@ class VideoPlayer extends React.Component{
 
     const _prefix = VideoPlayerStore._prefix;
     const playpause = (VideoPlayerStore.isPlaying && VideoPlayerStore.tCurrent > 0 ) ? 'play_arrow' : 'pause';
-    const fscl = (VideoPlayerStore.isFullScreen) ?  "isFullScreen" : "";
 
     let render_out;
     const rndBool = (VideoPlayerStore.screenType == 2);
@@ -319,19 +398,23 @@ class VideoPlayer extends React.Component{
       <Rnd
         default={{x: 0,y: 0,width: w, height: h}}
         className={
-          cx(`${_prefix}-rnd`,
-            `${_prefix}-screen-${VideoPlayerStore.screenType}`
+          cx(classes.rnd,
+            {[classes.screen_0]: VideoPlayerStore.screenType === 0 },
+            {[classes.screen_1]: VideoPlayerStore.screenType === 1 },
+            {[classes.screen_2]: VideoPlayerStore.screenType === 2 },
           )
         }
         disableDragging={!rndBool}
         enableResizing={enableResizing}
         bounds={this.props.bounds}
-        dragHandlerClassName={`.${_prefix}-dragger`}
+        dragHandlerClassName={cx(classes.dragger)}
         minWidth={minWidth}
         minHeight={minHeight}
       >
-      <ContextMenuTrigger id={this.contextMenuId} style={{height: '100%',width: '100%'}}>
-        <FaDiv className={`${_prefix}-dragger`}>
+      <ContextMenuTrigger id={this.contextMenuId} style={{height: '100%',width: '100%'}}
+        holdToDisplay={holdToDisplay}
+        >
+        <FaDiv className={cx(classes.dragger)}>
           {makeButton(classes ,'close',(e)=>{this.handleScreenType(e)})}
         </FaDiv>
         <Div
@@ -340,9 +423,9 @@ class VideoPlayer extends React.Component{
               classes.player,
               classes.layer_root,
               classes.fullHW,
-              fscl,
-              { "showControls": (!VideoPlayerStore.isPlaying || VideoPlayerStore.isSettingsOpen || VideoPlayerStore.isOverPlayer)},
-              { "hideControls": !(!VideoPlayerStore.isPlaying || VideoPlayerStore.isSettingsOpen || VideoPlayerStore.isOverPlayer)},
+              {[classes.isFullScreen]: VideoPlayerStore.isFullScreen},
+              { [classes.showControls]: (!VideoPlayerStore.isPlaying || VideoPlayerStore.isSettingsOpen || VideoPlayerStore.isOverPlayer)},
+              //{ "hideControls": !(!VideoPlayerStore.isPlaying || VideoPlayerStore.isSettingsOpen || VideoPlayerStore.isOverPlayer)},
             )
           }
           style={{...sty}}
@@ -373,7 +456,7 @@ class VideoPlayer extends React.Component{
                 {
                   (VideoPlayerStore.showNerdStats) ?
                 <Div>
-                    <Paper>
+                    <Paper className={classes.nerdPaper}>
                       <ul className={classes.nerdUL}>
                         {
                           stats.map((o)=> labelList(o.label,o.value) )
@@ -420,7 +503,7 @@ class VideoPlayer extends React.Component{
                 {/*Here put the control background*/}
                 <Div className={cx(classes.controlBg)}></Div>
 
-                <Div className={`${_prefix}-controls-layer ${classes.controlsLayer} ${_prefix}-unhinder`}>
+                <Div className={cx(classes.controlsLayer,`${_prefix}-unhinder`)}>
                   <Controls
                     handlePlayPause={this.handlePlayPause}
                     separator={this.props.separator}

@@ -3,9 +3,33 @@ import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 
-import Slider from '../Slider';
+import { createStyleSheet, withStyles } from 'material-ui/styles';
 import {Fa, FaDiv} from 'material-son'
+import cx from 'classnames';;
 
+import Slider from '../Slider';
+
+const styleSheet = createStyleSheet('MsonVolume',theme => ({
+  root: {
+    width: theme.vplayer.widthVolume,
+    alignItems: 'center',
+    marginRight: '20px',
+  	transition: '0.15s linear width',
+  },
+  compress: {
+    width: theme.vplayer.compressedWidthVolume,
+  },
+  slider_root: {
+    transition: `${theme.vplayer.volumeTransitionTime} linear flex`,
+  },
+  hideSlider: {
+    flex: 'none',
+  	overflow: 'hidden',
+  },
+}));
+
+
+@withStyles(styleSheet)
 @inject('VideoPlayerStore') @observer
 class Volume extends React.Component{
   @observable hideSlider = true;
@@ -16,15 +40,23 @@ class Volume extends React.Component{
     super(props);
   }
   render(){
-    const {VideoPlayerStore} = this.props;
+    const { VideoPlayerStore, classes } = this.props;
     const {_prefix} = VideoPlayerStore;
 
     return (
-      <FaDiv fa className={`${_prefix}-volume-container ${(this.hideSlider) ? "compress": ""}`} onMouseEnter={()=>{ this.showVolumeSlider() }} onMouseLeave={()=>{ this.hideVolumeSlider() }}>
-        <Fa className={`${_prefix}-volume-button`}>
+      <FaDiv fa className={cx(
+        classes.root,
+        {[classes.compress]: this.hideSlider}
+      )}
+      onMouseEnter={()=>{ this.showVolumeSlider() }}
+      onMouseLeave={()=>{ this.hideVolumeSlider() }} >
+        <Fa>
           {this.props.makeButton((VideoPlayerStore.vCurrent == 0 ) ? 'volume_off' : (VideoPlayerStore.vCurrent > 0.5) ? "volume_up" :'volume_down',() =>{this.handleVolumeToggle()} )}
         </Fa>
-        <Fa fs className={`${_prefix}-volume-slider-container ${(this.hideSlider) ? "hideSlider": ""}`}>
+        <Fa fs className={cx(
+          classes.slider_root,
+          {[classes.hideSlider] : this.hideSlider},
+        )}>
           <Slider _prefix={_prefix} onMove={this.onMoveVolume} onDown={this.onMoveVolume} isReady={VideoPlayerStore.isReady} value={VideoPlayerStore.vCurrent} middleMouse />
         </Fa>
       </FaDiv>

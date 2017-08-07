@@ -26,8 +26,41 @@ const styleSheet = createStyleSheet('MsonRails', theme => ({
   },
   invisible: {
     'display': 'none',
-  }
+  },
+  rails:{},
+  current:{},
+  handle_baby:{},
+  total:{},
+  main: {
+    '& $rails': {
+      padding: '5px 10px',
+      height: theme.vplayer.totalheight,
+    },
+    '& $handle_baby': {
+      transform: 'scale(0)',
+      border: `${theme.vplayer.handleBorder} solid ${theme.vplayer.primaryColor}`,
+      background: theme.vplayer.primaryColorLight,
+    },
+    '& $current': {
+      borderRadius: '0px',
+      background: theme.vplayer.primaryColor,
+    },
+    '& $total': {
+      borderRadius: '0px',
+      height: theme.vplayer.totalheightCompressed,
+    	transition: '.15s linear height',
+    },
+    '& $rails': {
+      '&:hover':{
+        '& $total':{
+          height: theme.vplayer.totalheight,
+        }
+      }
+    }
+  },
 }));
+
+
 let perThumb = 0;
 const paddingGap = 30;
 const maxLeft = 90;
@@ -63,13 +96,8 @@ class Rails extends React.Component{
       }
     }
 
-    let negativehovered = (VideoPlayerStore.hoveredDirection) ? "" : "negativehovered";
-    let totalChild = [
-      (<div key="0" className={`${_prefix}-loaded`} style={{transform: `scaleX(${VideoPlayerStore.loadedTransform})`}}></div>),
-      (<div key="1" className={`${_prefix}-hovered ${negativehovered}`} style={{left: `${VideoPlayerStore.hoveredLeft}px`,transform: `scaleX(${VideoPlayerStore.hoveredTransform})`}}></div>)
-    ];
     return (
-      <Fa className={`${_prefix}-main-slider`}>
+      <Fa className={cx(classes.main)}>
         <Paper
           className={cx(
             classes.timeTooltip,
@@ -77,7 +105,7 @@ class Rails extends React.Component{
             {[classes.invisible]: !(this.showTip || this.mouseIsDown) }
           )}
           style={{
-            left: `${(this.mouseIsDown) ? ((currentCue) ? midPercentThumb : midPercent) : limitBetween((this.percentage*100)-10,2, (currentCue) ? maxLeftThumb : maxLeft )}%`,
+            left: `${(this.mouseIsDown) ? ((currentCue) ? midPercentThumb : midPercent) : limitBetween((this.percentage*100),2, (currentCue) ? maxLeftThumb : maxLeft )}%`,
             top: `-${(currentCue) ? paddingGap + currentCue.h : paddingGap }px`,
           }} >
           {(currentCue) ?
@@ -92,21 +120,32 @@ class Rails extends React.Component{
         </Paper>
         <Slider
           showTooltip
-          doHover
+          hasHovered
+          hasLoaded
           isPlaying={VideoPlayerStore.isPlaying}
           _prefix={_prefix}
           isReady={VideoPlayerStore.isReady}
           onMove={this.onMove}
           onDown={this.onDown}
           onUp={this.onUp}
-          totalChild={totalChild}
           value={VideoPlayerStore.currentTransform}
+
+          hoveredDirection={VideoPlayerStore.hoveredDirection}
+          hoveredLeft={VideoPlayerStore.hoveredLeft}
+          hoveredTransform={VideoPlayerStore.hoveredTransform}
+          loadedTransform={VideoPlayerStore.loadedTransform}
 
           onMouseEnter={()=> {
             this.showTip = true
           }}
           onMouseLeave={()=> {
             this.showTip = false
+          }}
+          classes={{
+            total: classes.total,
+            rails: classes.rails,
+            handle_baby: classes.handle_baby,
+            current: classes.current,
           }}
         />
       </Fa>

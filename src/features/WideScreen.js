@@ -14,7 +14,7 @@ class WideScreen extends React.Component{
   }
   render(){
     const {VideoPlayerStore} = this.props;
-    const [stc,stt] = (VideoPlayerStore.screenType == 0) ? ['panorama_wide_angle','Widescreen'] : ((VideoPlayerStore.screenType == 1)  ?  ['all_out','Dock Out'] : ['crop_square','Normal']);
+    const [stc,stt] = (VideoPlayerStore.screenType == 0) ? ['panorama_wide_angle','Widescreen'] : ((VideoPlayerStore.screenType == 1)  ?  ['eject','Dock Out'] : ['crop_square','Normal']);
     return (
       <Fa>
         {this.props.makeButton(stc,(e) =>{this.handleScreenType(e)},stt)}

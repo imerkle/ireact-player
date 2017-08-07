@@ -89,7 +89,7 @@ const LivePlayer = (`
               poster={'http://ebunny3k.com/wp-content/uploads/2017/05/73511-thumb.jpg'}
               src={[
                 {
-                  src: 'http://dash.edgesuite.net/envivio/EnvivioDash3/manifest.mpd',
+                  src: "assets/Dogs Just Don't Want to Bath 2015 [HD].mp4",
                   value: 240,
                   size: 20,
                   duration: 6.08*60,
@@ -135,6 +135,7 @@ const App = () => (
 )
   /*
 
+  src: 'http://dash.edgesuite.net/envivio/EnvivioDash3/manifest.mpd',
   src: 'https://www.youtube.com/watch?v=LCZ-cxfxzvk',
   src: 'https://www.youtube.com/watch?v=vZiUBoZ454E',
   src: 'assets/Kurzweil-K2000-Dual-Bass-C1.wav',
