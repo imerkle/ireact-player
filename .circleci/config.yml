@@ -1,5 +1,5 @@
 defaults: &defaults
-  working_directory: /tmp/utube  
+  working_directory: /tmp/utube
   docker:
     - image: circleci/node:8.0.0
 version: 2
@@ -16,6 +16,16 @@ jobs:
             node --version
             env
             yarn cache dir
+      - run:
+          name: Install js dependencies
+          command: |
+            yarn install --pure-lockfile
+            cd docs && yarn install --pure-lockfile
+  start_it:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /tmp/utube
       - run:
           name: Install js dependencies
           command: |
@@ -50,9 +60,12 @@ workflows:
   pipeline:
     jobs:
       - checkout
-      - test_it:
+      - start_it:
           requires:
             - checkout
+      - test_it:
+          requires:
+            - start_it
       - build_it:
           requires:
             - test_it
