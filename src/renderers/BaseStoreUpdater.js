@@ -1,7 +1,8 @@
 class BaseStoreUpdater{
-  constructor({store}={}){
+  constructor({store, playerClass}={}){
     this.store = store;
     this.autoPlayed = false;
+    this.playerClass = playerClass;
   }
   onReady = (duration) => {
     const p = this.store.qualityArray[this.store.urlIndex];
@@ -43,8 +44,8 @@ class BaseStoreUpdater{
       isError: true
     });
   }
-  onFullScreen = ({doFullscreen, div, playerClass} = {}) => {
-    let player = div.closest(`.${playerClass}`);
+  onFullScreen = ({doFullscreen, div} = {}) => {
+    let player = div.closest(`.${this.playerClass}`);
     if(doFullscreen){
       if(player.mozRequestFullScreen){
         player.mozRequestFullScreen();

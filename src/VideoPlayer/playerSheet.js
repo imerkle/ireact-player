@@ -114,7 +114,7 @@ export const styleProps = {
   },
   controlsLayer: {
     width: '100%',
-    zIndex: '10',
+    zIndex: '30',
     color: secondaryColor,
     fontSize: '13px',
     ...hideBottom
@@ -174,9 +174,13 @@ export const styleProps = {
   dragger: {
     background: black,
   	flexDirection: 'row-reverse',
-    padding: '6px 0px',
-  	cursor: 'pointer',
+    padding: '3px 0px',
+  	cursor: 'pointer!important',
     visibility: 'hidden',
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    zIndex: 10,
   },
   screen_0: {},
   screen_1:{
@@ -205,9 +209,6 @@ export const styleProps = {
       '& > div':{
         width: '100%!important',
       },
-    },
-    '&$screen_1': {
-      extend: 'rndfix',
     },
   },
   isFullScreen: {

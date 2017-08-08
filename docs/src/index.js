@@ -84,38 +84,37 @@ class Header extends React.Component{
 
 
 const LivePlayer = (`
-    <div className="ut-player-container" style={{width:640,height:360,textAlign: 'left',display: 'inline-block'}}>
+    <div className="ut-player-container" style={{textAlign: 'left',width: '100%',height: '480px'}}>
             <VideoPlayer isAutoQuality={false} style={{width:640,height:360,textAlign: 'left'}}
-              poster={'http://ebunny3k.com/wp-content/uploads/2017/05/73511-thumb.jpg'}
+              poster={'https://img.youtube.com/vi/iRZ2Sh5-XuM/hqdefault.jpg'}
               src={[
                 {
-                  src: "assets/Dogs Just Don't Want to Bath 2015 [HD].mp4",
-                  value: 240,
-                  size: 20,
-                  duration: 6.08*60,
+                  src: "assets/store_720.mp4",
+                  value: 720,
+                  size: 12.9,
+                  duration: 0.48,
+                  fps: 60,
                   default: true,
                 },
                 {
-                  src: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
-                  value: 360,
-                  size: 30,
-                  duration: 3.04*60,
+                  src: 'assets/store_480.mp4',
+                  value: 480,
+                  size: 4.3,
+                  duration: 0.48,
                 },
                 {
-                  src: 'http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_30mb.mp4',
-                  value: 720,
-                  fps: 60,
-                  size: 30,
-                  duration: 2.51*60,
+                  src: 'assets/store_144.webm',
+                  value: 144,
+                  size: 0.4822,
+                  duration: 0.48,
                 }
               ]}
-              src="assets/Dogs Just Don't Want to Bath 2015 [HD].mp4"
               annotation_url={'https://gist.githubusercontent.com/dsslimshaddy/ca3163ba1cb1d610f3b1aef3cb51eecf/raw?cache='+Math.random()}
               caption_url={'https://gist.githubusercontent.com/dsslimshaddy/ca3163ba1cb1d610f3b1aef3cb51eecf/raw?cache='+Math.random()}
               thumbnail_url={'https://gist.githubusercontent.com/dsslimshaddy/573ac377a38666c97dcb96b0c02610b1/raw?cache='+Math.random()}
               markers={[
                 {start: 10},
-                {start: 63,end: 96,color: 'green'},
+                {start: 23,end: 35,color: 'green'},
               ]}
             />
           </div>

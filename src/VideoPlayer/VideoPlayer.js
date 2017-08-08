@@ -116,6 +116,7 @@ class VideoPlayer extends React.Component{
       this.autoplay = props.autoplay;
       this.initializeStore(props);
     }
+    this.playerFullscreenId = null;
   }
   componentWillReceiveProps(nextProps){
 
@@ -140,7 +141,8 @@ class VideoPlayer extends React.Component{
     this.onContruct();
   }
   onContruct(){
-    let updater = new BaseStoreUpdater({store: this.VideoPlayerStore});
+    this.playerFullscreenId = `fullscreen-${randomGenerate()}-${Math.round((new Date()).getTime() / 1000)}`;
+    let updater = new BaseStoreUpdater({store: this.VideoPlayerStore,playerClass: this.playerFullscreenId});
     this.vendorProps = {
       updater: updater,
     };
@@ -148,12 +150,14 @@ class VideoPlayer extends React.Component{
   }
   render(){
     const { classes, stats, autoplay, poster, thumbnail_url, markers, holdToDisplay }  = this.props;
+    const {width: w,height: h, ...sty} = this.props.style;
+
     if(!autoplay && poster && !this.initialized){
       return (
-        <Div className={cx(classes.fullHW)}
+        <Div
           style={{
             background: `url(${poster})`,
-            ...sty
+            ...this.props.style
           }}
           onClick={()=>{
             this.initialized = true;
@@ -190,8 +194,6 @@ class VideoPlayer extends React.Component{
       topRight: rndBool
     };
 
-    const {width: w,height: h, ...sty} = this.props.style;
-
     render_out = (
     <MuiThemeProvider theme={theme}>
      <Div className={cx(classes.fullHW)}>
@@ -207,19 +209,20 @@ class VideoPlayer extends React.Component{
         disableDragging={!rndBool}
         enableResizing={enableResizing}
         bounds={this.props.bounds}
-        dragHandlerClassName={classes.dragger}
+        dragHandlerClassName={`.${classes.dragger}`}
         minWidth={minWidth}
         minHeight={minHeight}
       >
       <ContextMenuTrigger id={this.contextMenuId} style={{height: '100%',width: '100%'}}
         holdToDisplay={holdToDisplay}
         >
-        <FaDiv className={cx(classes.dragger)}>
+        <FaDiv className={cx(classes.dragger,classes.unhinder)}>
           {makeButton(classes ,'close',(e)=>{this.handleScreenType(e)})}
         </FaDiv>
         <Div
           className={
             cx(
+              this.playerFullscreenId,
               classes.player,
               classes.layer_root,
               classes.fullHW,

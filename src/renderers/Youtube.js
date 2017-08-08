@@ -134,7 +134,7 @@ setSource = (src) => {
 setFullScreen = (doFullscreen) => {
   this.props.updater.onFullScreen({
       doFullscreen: doFullscreen,
-      div: this.ref
+      div: this.ref,
     });
 }
 

@@ -22,5 +22,5 @@ erl_crash.dump
 
 #docs
 #/docs/build
-/docs/assets
+#/docs/assets
 /docs/node_modules
