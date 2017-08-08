@@ -30,7 +30,7 @@ jobs:
       - persist_to_workspace:
           root: /tmp/utube
           paths:
-            - utube
+            - utube 
   test_it:
     <<: *defaults
     steps:
