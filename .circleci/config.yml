@@ -16,21 +16,21 @@ jobs:
             node --version
             env
             yarn cache dir
+      - restore_cache:
+          key: yarn-sha-{{ checksum "yarn.lock" }}
       - run:
           name: Install js dependencies
           command: |
             yarn install --pure-lockfile
             cd docs && yarn install --pure-lockfile
-  start_it:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: /tmp/utube
-      - run:
-          name: Install js dependencies
-          command: |
-            yarn install --pure-lockfile
-            cd docs && yarn install --pure-lockfile
+      - save_cache:
+          key: yarn-sha-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn/v1
+      - persist_to_workspace:
+          root: /tmp/utube
+          paths:
+            - utube
   test_it:
     <<: *defaults
     steps:
@@ -59,13 +59,10 @@ workflows:
   version: 2
   pipeline:
     jobs:
-      - checkout
-      - start_it:
-          requires:
-            - checkout
+      - checkout:
       - test_it:
           requires:
-            - start_it
+            - checkout
       - build_it:
           requires:
             - test_it
