@@ -1,4 +1,5 @@
 defaults: &defaults
+  working_directory: /tmp/utube  
   docker:
     - image: circleci/node:8.0.0
 version: 2
@@ -15,24 +16,32 @@ jobs:
             node --version
             env
             yarn cache dir
+      - run:
+          name: Install js dependencies
+          command: |
+            yarn install --pure-lockfile
+            cd docs && yarn install --pure-lockfile
   test_it:
     <<: *defaults
     steps:
-      # Fetch the code
+      - attach_workspace:
+          at: /tmp/utube
       - run:
           name: Test Everything
           command:  jest --coverage
   build_it:
     <<: *defaults
     steps:
-      # Fetch the code
+      - attach_workspace:
+          at: /tmp/utube
       - run:
           name: Build everything
           command:  yarn run build
   publish_it:
     <<: *defaults
     steps:
-      # Fetch the code
+      - attach_workspace:
+          at: /tmp/utube
       - run:
           name: Publish to npm
           command:  npm publish ./build
