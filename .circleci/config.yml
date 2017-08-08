@@ -32,15 +32,6 @@ jobs:
       - run:
           name: Build everything
           command:  yarn run build
-  build_docs:
-    <<: *defaults
-    steps:
-      # Fetch the code
-      - run:
-          name: Build Docs
-          command: |
-          cd docs && yarn run build
-          cd ../
   publish_it:
     <<: *defaults
     steps:
@@ -62,6 +53,3 @@ workflows:
       - publish_it:
           requires:
             - build_it
-      - build_docs:
-          requires:
-            - test_it
