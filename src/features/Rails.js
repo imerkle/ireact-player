@@ -32,10 +32,6 @@ const styleSheet = createStyleSheet('MsonRails', theme => ({
   handle_baby:{},
   total:{},
   main: {
-    '& $rails': {
-      padding: '5px 10px',
-      height: theme.vplayer.totalheight,
-    },
     '& $handle_baby': {
       transform: 'scale(0)',
       border: `${theme.vplayer.handleBorder} solid ${theme.vplayer.primaryColor}`,
@@ -51,6 +47,8 @@ const styleSheet = createStyleSheet('MsonRails', theme => ({
     	transition: '.15s linear height',
     },
     '& $rails': {
+      padding: '5px 10px',
+      height: theme.vplayer.totalheight,
       '&:hover':{
         '& $total':{
           height: theme.vplayer.totalheight,
@@ -62,7 +60,7 @@ const styleSheet = createStyleSheet('MsonRails', theme => ({
 
 
 let perThumb = 0;
-const paddingGap = 30;
+const paddingGap = 35;
 const maxLeft = 90;
 const maxLeftThumb = 70;
 const midPercent = 45;
@@ -78,15 +76,19 @@ class Rails extends React.Component{
   @observable cueIndex = 0;
   constructor(props){
     super(props);
+
+    this.currentCue = null;
+  }
+  setPreview = (currentCue = null) => {
+    if(!this.cues) return false;
+    this.props.VideoPlayerStore.setValue({bigPreview: currentCue})
   }
   render(){
     const { classes, VideoPlayerStore, thumbnail_url } = this.props;
-    const { _prefix } = VideoPlayerStore;
-    let currentCue = null;
     if(this.cues){
       //console.log(this.newTime, perThumb);
       const cueIndex = limitBetween(Math.floor(this.newTime/perThumb),0,this.cues.length - 1);
-      currentCue = this.cues[cueIndex];
+      this.currentCue = this.cues[cueIndex];
     }else{
       if(thumbnail_url && VideoPlayerStore.isReady){
         getCues(thumbnail_url, (cues)=>{
@@ -95,6 +97,7 @@ class Rails extends React.Component{
         })
       }
     }
+    const currentCue = this.currentCue;
 
     return (
       <Fa className={cx(classes.main)}>
@@ -123,7 +126,6 @@ class Rails extends React.Component{
           hasHovered
           hasLoaded
           isPlaying={VideoPlayerStore.isPlaying}
-          _prefix={_prefix}
           isReady={VideoPlayerStore.isReady}
           onMove={this.onMove}
           onDown={this.onDown}
@@ -168,23 +170,29 @@ class Rails extends React.Component{
               };
       })();
       this.newTime = (percentage <= 0.02) ? 0 : percentage * VideoPlayerStore.tTotal;
-      if (mouseIsDown && VideoPlayerStore.tCurrent !== null && this.newTime.toFixed(4) !== VideoPlayerStore.tCurrent.toFixed(4)) {
+      if (mouseIsDown && this.newTime) {
         VideoPlayerStore.setCurrentTime(this.newTime);
+        this.setPreview(this.currentCue)
+      }else{
+        this.setPreview()
       }
-      const matrix = new window[getCssMatrix](getComputedStyle(handle)[getTransform]),
-            handleLocation = matrix.m41,
-            hoverScaleX = pos/parseFloat(totalStyles.width) - handleLocation/parseFloat(totalStyles.width);
-      let hoveredDirection;
-      if (hoverScaleX >= 0) {
-        hoveredDirection = true;
-      } else {
-        hoveredDirection = false;
+      
+      if(this.showTip){
+        const matrix = new window[getCssMatrix](getComputedStyle(handle)[getTransform]),
+              handleLocation = matrix.m41,
+              hoverScaleX = pos/parseFloat(totalStyles.width) - handleLocation/parseFloat(totalStyles.width);
+        let hoveredDirection;
+        if (hoverScaleX >= 0) {
+          hoveredDirection = true;
+        } else {
+          hoveredDirection = false;
+        }
+        VideoPlayerStore.setValue({
+          hoveredLeft: handleLocation,
+          hoveredTransform: hoverScaleX,
+          hoveredDirection: hoveredDirection
+        });
       }
-      VideoPlayerStore.setValue({
-        hoveredLeft: handleLocation,
-        hoveredTransform: hoverScaleX,
-        hoveredDirection: hoveredDirection
-      });
     }
   onDown = () => {
       const { VideoPlayerStore } = this.props;
@@ -194,6 +202,7 @@ class Rails extends React.Component{
         this.wasPlayingTimeout = setTimeout(() => {
           VideoPlayerStore.togglePlay(false,true);
           this.wasPlaying = true;
+          VideoPlayerStore.seekTo(this.newTime);
         },holdclickTime);
       }
     }

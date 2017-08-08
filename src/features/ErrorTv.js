@@ -33,14 +33,12 @@ class ErrorTv extends React.Component{
   static propTypes = {
     isError: PropTypes.bool.isRequired,
     errorText: PropTypes.string,
-    _prefix: PropTypes.string.isRequired,
     width: PropTypes.number,
     height: PropTypes.number,
   }
   static defaultProps = {
     isError: false,
     errorText: 'There was an error in loading the Video.',
-    _prefix: 'ut',
     width: 840,
     height: 400,
   }

@@ -31,8 +31,6 @@ class VideoPlayerStore{
   @observable mouseIsDown = false;
   @observable beginanimate = false;
 
-  @observable _prefix;
-
   @observable isOverPlayer = false;
 
   @observable isSettingsOpen = false;
@@ -53,10 +51,11 @@ class VideoPlayerStore{
   @observable kbps = 0;
   @observable showNerdStats = false;
   @observable autoplay = false;
+  @observable bigPreview = null;
 
 
   constructor(
-    {url,_prefix="ut",vCurrent=1.0,isAutoQuality=true,annotation_url = null,caption_url = null,autoplay}
+    {url,vCurrent=1.0,isAutoQuality=true,annotation_url = null,caption_url = null,autoplay}
   ){
     this.player = null;
     if(!(url instanceof Array)){
@@ -67,7 +66,6 @@ class VideoPlayerStore{
     this.qualityArray = url;
 
     this.vCurrent = vCurrent;
-    this._prefix = _prefix;
     this.isAutoQuality = isAutoQuality;
     this.autoplay = autoplay;
     if(!annotation_url) this.canBeAnnotation = false;

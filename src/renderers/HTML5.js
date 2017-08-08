@@ -31,12 +31,6 @@ const DASH_EXTENSIONS = /\.(mpd)($|\?)/i
 
 @inject('VideoPlayerStore') @observer
 export default class FilePlayer extends React.Component {
-  static defaultProps = {
-    _prefix: "ut"
-  }
-  static propTypes = {
-    _prefix: PropTypes.string
-  }
   static canPlay = (url) => {
     return true
   }

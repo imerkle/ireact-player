@@ -43,8 +43,8 @@ class BaseStoreUpdater{
       isError: true
     });
   }
-  onFullScreen = ({doFullscreen, div} = {}) => {
-    let player = div.closest(`.${this.store._prefix}-player`);
+  onFullScreen = ({doFullscreen, div, playerClass} = {}) => {
+    let player = div.closest(`.${playerClass}`);
     if(doFullscreen){
       if(player.mozRequestFullScreen){
         player.mozRequestFullScreen();

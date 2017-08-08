@@ -82,7 +82,6 @@ class Settings extends React.Component{
   }
   render(){
     const {VideoPlayerStore, classes} = this.props;
-    const {_prefix} = VideoPlayerStore;
     const speedArray = [
       {value: 0.25},
       {value: 0.5},

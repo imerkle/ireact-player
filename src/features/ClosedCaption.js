@@ -16,10 +16,6 @@ class ClosedCaption extends React.Component{
     makeButton: PropTypes.func.isRequired,
     onCaptionClick: PropTypes.func.isRequired,
     isCaptionOn: PropTypes.bool.isRequired,
-    _prefix: PropTypes.string
-  }
-  static defaultProps = {
-    _prefix: "ut"
   }
   constructor(props){
     super(props);

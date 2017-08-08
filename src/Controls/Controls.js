@@ -45,8 +45,6 @@ class Controls extends React.Component{
   }
   render(){
     let { VideoPlayerStore, classes, thumbnail_url } = this.props;
-    let _prefix = VideoPlayerStore._prefix;
-
 
     return(
       <FaDiv c>
@@ -62,7 +60,7 @@ class Controls extends React.Component{
           <Fa fs className={classes.rightControl}>
             {
               (VideoPlayerStore.canBeCaption) ?
-              <ClosedCaption makeButton={makeButton} _prefix={VideoPlayerStore._prefix} isCaptionOn={VideoPlayerStore.isCaptionOn} onCaptionClick={()=>{VideoPlayerStore.isCaptionOn = !VideoPlayerStore.isCaptionOn}}/>
+              <ClosedCaption makeButton={makeButton} isCaptionOn={VideoPlayerStore.isCaptionOn} onCaptionClick={()=>{VideoPlayerStore.isCaptionOn = !VideoPlayerStore.isCaptionOn}}/>
               : ""
             }
             <Settings />

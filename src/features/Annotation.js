@@ -8,10 +8,10 @@ import uniqBy from 'lodash.uniqby';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 
 import { IconDiv, Div } from 'material-son';
+import cx from 'classnames';
 
 import { SHEET_NAME } from '../constants.js';
 import { getCueKeys, getCues } from '../utils/dom.js';
-
 
 const defaultStyleAttributes = {
   left: "0%",
@@ -41,7 +41,8 @@ const styleSheet = createStyleSheet(SHEET_NAME.ANN, {
   flaps: defaultStyleAttributes,
   innerText: {
     padding: '10px',
-  }
+  },
+  unhinder: {},
 });
 
 
@@ -52,11 +53,8 @@ class Annotation extends React.Component{
     url: PropTypes.string.isRequired,
     duration: PropTypes.number.isRequired,
     currentTime: PropTypes.number.isRequired,
-    _prefix: PropTypes.string,
   }
-  static defaultProps = {
-    _prefix: "ut"
-  }
+
   constructor(props){
     super(props);
 
@@ -93,22 +91,25 @@ class Annotation extends React.Component{
     return this.state.cues.map((o,i)=>
         (
           (o.hide) ?  "" :
-          <IconDiv className={`${this.props._prefix}-unhinder`} onIconClick={()=>{
+          <IconDiv
+            onIconClick={()=>{
             let cues = this.state.cues;
             cues[i].hide = true;
             this.setState(cues: cues);
-           }} className={classes.flaps} key={i} style={o.style}>
-            <Div className={classes.innerText}>{o.text}</Div>
+          }}
+            className={cx(classes.unhinder, classes.flaps)}
+            key={i}
+            style={o.style} >
+              <Div className={classes.innerText}>{o.text}</Div>
           </IconDiv>
         )
     );
   }
   render(){
-    const _prefix = this.props._prefix;
     const classes = this.props.classes;
 
     let out = (this.props.isAnnotation) ?
-    <Div className={`${_prefix}-annotation-layer ${classes.root}`}>
+    <Div className={cx(classes.root)}>
       {this.display()}
     </Div> : null;
 

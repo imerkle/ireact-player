@@ -8,6 +8,7 @@ import Rnd from 'react-rnd';
 
 import { Div } from 'material-son';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
+import cx from 'classnames';
 
 import { SHEET_NAME } from '../constants.js';
 import { getCueKeys, getCues } from '../utils/dom.js';
@@ -26,8 +27,9 @@ const styleSheet = createStyleSheet(SHEET_NAME.CCLayer,theme => ({
    '&:empty':{
      display: 'none',
    },
- }
-}));
+ },
+ unhinder:{},
+ }));
 
 
 @withStyles(styleSheet)
@@ -38,10 +40,6 @@ class ClosedCaptionLayer extends React.Component{
     url: PropTypes.string.isRequired,
     duration: PropTypes.number.isRequired,
     currentTime: PropTypes.number.isRequired,
-    _prefix: PropTypes.string,
-  }
-  static defaultProps = {
-    _prefix: "ut"
   }
   constructor(props){
     super(props);
@@ -77,13 +75,12 @@ class ClosedCaptionLayer extends React.Component{
     return this.state.cues.slice(0,1).map((o,i)=> (o.text) );
   }
   render(){
-    const _prefix = this.props._prefix;
     const classes = this.props.classes;
 
     let out = (this.props.isCaptionOn) ?
-    <Div className={`${_prefix}-caption-layer ${classes.root}`}>
+    <Div className={cx(classes.root)}>
       <Rnd default={{x: 20,y: 50,width: 'auto', height: 'auto'}} enableResizing={0} bounds="parent">
-        <Div className={`${_prefix}-unhinder ${classes.flaps}`}>{this.display()}</Div>
+        <Div className={cx(classes.unhinder, classes.flaps)}>{this.display()}</Div>
       </Rnd>
     </Div> : null;
 

@@ -132,7 +132,7 @@ class Slider extends React.Component{
     hasLoaded: false,
   }
   render(){
-    const { _prefix, classes, hasHovered, hasLoaded, hoveredDirection, hoveredLeft, hoveredTransform, loadedTransform } = this.props;
+    const { classes, hasHovered, hasLoaded, hoveredDirection, hoveredLeft, hoveredTransform, loadedTransform } = this.props;
     let mouseisDownClass = (this.state.mouseIsDown) ? classes.mouseIsDown : "";
 
     return(
@@ -271,8 +271,6 @@ class Slider extends React.Component{
     document.removeEventListener("mouseup",this.handleSliderUp);
   }
   handleSliderUp = () => {
-
-
     this.props.onUp(this.state.percentage);
     this.setState({mouseIsDown: false});
     document.removeEventListener("mousemove",this.handleSliderMove);

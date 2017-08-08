@@ -41,7 +41,6 @@ class Volume extends React.Component{
   }
   render(){
     const { VideoPlayerStore, classes } = this.props;
-    const {_prefix} = VideoPlayerStore;
 
     return (
       <FaDiv fa className={cx(
@@ -57,7 +56,7 @@ class Volume extends React.Component{
           classes.slider_root,
           {[classes.hideSlider] : this.hideSlider},
         )}>
-          <Slider _prefix={_prefix} onMove={this.onMoveVolume} onDown={this.onMoveVolume} isReady={VideoPlayerStore.isReady} value={VideoPlayerStore.vCurrent} middleMouse />
+          <Slider onMove={this.onMoveVolume} onDown={this.onMoveVolume} isReady={VideoPlayerStore.isReady} value={VideoPlayerStore.vCurrent} middleMouse />
         </Fa>
       </FaDiv>
     );
