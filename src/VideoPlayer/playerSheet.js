@@ -224,4 +224,7 @@ export const styleProps = {
       ...onHoverControls,
     }
   },
+  bigPreview: {
+    transform: 'scale(4)',
+  },
 };

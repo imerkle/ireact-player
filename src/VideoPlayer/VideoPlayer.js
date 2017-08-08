@@ -256,8 +256,9 @@ class VideoPlayer extends React.Component{
                 <Div className={cx(classes.fullHW)}>
                   <ErrorTv isError={VideoPlayerStore.isError} />
                 </Div>
-                {(bigPreview) ? <Div className={cx(classes.fullHW)}>
+                {(bigPreview) ? <FaDiv hcenter vcenter className={cx(classes.fullHW)}>
                   <Div
+                    className={cx(classes.bigPreview)}
                     style={{
                      backgroundImage: `url(${bigPreview.src})`,
                      backgroundPosition: `-${bigPreview.x}px -${bigPreview.y}px`,
@@ -265,7 +266,7 @@ class VideoPlayer extends React.Component{
                      width: `${bigPreview.w}px`,
                     }} >
                   </Div>
-                </Div> : ""}
+                </FaDiv> : ""}
                 {
                   (VideoPlayerStore.showNerdStats) ?
                 <Div>

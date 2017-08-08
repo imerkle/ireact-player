@@ -204,9 +204,9 @@ class Rails extends React.Component{
         this.wasPlayingTimeout = setTimeout(() => {
           VideoPlayerStore.togglePlay(false,true);
           this.wasPlaying = true;
-          VideoPlayerStore.seekTo(this.newTime);
         },holdclickTime);
       }
+      this.setPreview(this.currentCue)
     }
   onUp = () => {
       let { VideoPlayerStore } = this.props;
@@ -224,6 +224,7 @@ class Rails extends React.Component{
         hoveredLeft: 0,
         hoveredTransform: 0
       });
+      this.setPreview()
   }
 }
 export default Rails;

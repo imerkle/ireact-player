@@ -200,11 +200,12 @@ class Slider extends React.Component{
               style={{transform: `scaleX(${this.props.value})`}}></div>
 
               {
-                markers.map((o)=>(
+                markers.map((o,i)=>(
 
                     <div className={cx(
                       classes.marker,
                      )}
+                    key={i}
                     style={{
                      left: `${o.start/duration*100}%`,
                      width: (o.end) ? `${(o.end - o.start)/duration*100}%` : `${markerWidth}px`,
