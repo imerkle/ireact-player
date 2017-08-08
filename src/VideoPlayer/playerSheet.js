@@ -52,8 +52,6 @@ export const vplayer = {
   compressedWidthVolume: '30px',
   volumeTransitionTime: '.05s',
 
-  markerColor: '#e8e211',
-  markerWidth: '4px',
 }
 const hideBottom = {
   bottom: '-15%',
@@ -224,5 +222,5 @@ export const styleProps = {
     '&:hover':{
       ...onHoverControls,
     }
-  },  
+  },
 };

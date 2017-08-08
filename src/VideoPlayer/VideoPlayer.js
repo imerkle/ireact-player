@@ -118,8 +118,15 @@ class VideoPlayer extends React.Component{
     }
   }
   componentWillReceiveProps(nextProps){
-     //this.initializeStore(nextProps);
-     //this.VideoPlayerStore.togglePlay(false,true);
+
+    const VideoPlayerStore = this.VideoPlayerStore;
+    const { isAutoQuality, annotation_url, caption_url, autoplay } = nextProps;
+
+    VideoPlayerStore.isAutoQuality = isAutoQuality;
+    VideoPlayerStore.autoplay = autoplay;
+    if(!annotation_url) VideoPlayerStore.canBeAnnotation = false;
+    if(!caption_url) VideoPlayerStore.canBeCaption = false;
+
   }
   initializeStore(props){
     let { src, isAutoQuality, annotation_url, caption_url } = props;
@@ -200,7 +207,7 @@ class VideoPlayer extends React.Component{
         disableDragging={!rndBool}
         enableResizing={enableResizing}
         bounds={this.props.bounds}
-        dragHandlerClassName={cx(classes.dragger)}
+        dragHandlerClassName={classes.dragger}
         minWidth={minWidth}
         minHeight={minHeight}
       >
