@@ -38,9 +38,8 @@ jobs:
       # Fetch the code
       - run:
           name: Build Docs
-          command:  |
-          cd docs
-          yarn run build
+          command: |
+          cd docs && yarn run build
           cd ../
   publish_it:
     <<: *defaults
