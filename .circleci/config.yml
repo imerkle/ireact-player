@@ -1,0 +1,68 @@
+defaults: &defaults
+  docker:
+    - image: circleci/node:8.0.0
+version: 2
+jobs:
+  checkout:
+    <<: *defaults
+    steps:
+      # Fetch the code
+      - checkout
+      - run:
+          name: Check versions and env
+          command: |
+            yarn --version
+            node --version
+            env
+            yarn cache dir
+  test_it:
+    <<: *defaults
+    steps:
+      # Fetch the code
+      - run:
+          name: Lint Everything
+          command:  yarn run lint
+      - run:
+          name: Test Everything
+          command:  jest --coverage
+  build_it:
+    <<: *defaults
+    steps:
+      # Fetch the code
+      - run:
+          name: Build everything
+          command:  yarn run build
+  build_docs:
+    <<: *defaults
+    steps:
+      # Fetch the code
+      - run:
+          name: Build Docs
+          command:  |
+          cd docs
+          yarn run build
+          cd ../
+  publish_it:
+    <<: *defaults
+    steps:
+      # Fetch the code
+      - run:
+          name: Publish to npm
+          command:  npm publish ./build
+workflows:
+  version: 2
+  pipeline:
+    jobs:
+      - checkout
+      - test_it:
+          requires:
+            - checkout
+      - build_it:
+          requires:
+            - test_it
+      - publish_it:
+          requires:
+            - build_it
+      - build_docs:
+          requires:
+            - test_it
