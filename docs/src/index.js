@@ -112,6 +112,10 @@ const LivePlayer = (`
               annotation_url={'https://gist.githubusercontent.com/dsslimshaddy/ca3163ba1cb1d610f3b1aef3cb51eecf/raw?cache='+Math.random()}
               caption_url={'https://gist.githubusercontent.com/dsslimshaddy/ca3163ba1cb1d610f3b1aef3cb51eecf/raw?cache='+Math.random()}
               thumbnail_url={'https://gist.githubusercontent.com/dsslimshaddy/573ac377a38666c97dcb96b0c02610b1/raw?cache='+Math.random()}
+              markers={[
+                {start: 10,},
+                {start: 15,},
+              ]}
             />
           </div>
 `).trim();

@@ -38,7 +38,7 @@ const styleSheet = createStyleSheet('MsonSlider',theme => ({
     padding: '0px',
     boxSizing: 'border-box',
     cursor: 'pointer',
-    zIndex: '1',
+    zIndex: 1,
     '&$mouseIsDown':{
       '& $current':{
         transition: 'none'
@@ -67,6 +67,8 @@ const styleSheet = createStyleSheet('MsonSlider',theme => ({
     borderRadius: '50%',
     border: `${theme.vplayer.handleBorderVolume} solid ${theme.vplayer.primaryColorVolume}`,
     background: theme.vplayer.primaryColorLightVolume,
+    marginLeft: '-5px', //fixes display bug
+
   },
   transition: {
     transition: 'all .15s ease-in'
@@ -89,9 +91,16 @@ const styleSheet = createStyleSheet('MsonSlider',theme => ({
   },
   handles: {
     //.ut-handle,.ut-handle-baby{
-      zIndex: '11',
+      zIndex: 11,
       transform: 'translateX(0px)',
       borderRadius: '50%',
+  },
+  marker: {
+    backgroundColor: theme.vplayer.markerColor,
+    width: '2px',
+    zIndex: 10,
+    height: '100%',
+    position: 'absolute',
   },
 }));
 
@@ -118,6 +127,8 @@ class Slider extends React.Component{
     speedFactor: PropTypes.number,
     hasHovered: PropTypes.bool,
     hasLoaded: PropTypes.bool,
+    markers: PropTypes.array,
+    duration: PropTypes.number,
   }
   static defaultProps = {
     onDown: ()=>{},
@@ -130,9 +141,11 @@ class Slider extends React.Component{
     speedFactor: 10,
     hasHovered: false,
     hasLoaded: false,
+    duration: 0,
+    markers: [],
   }
   render(){
-    const { classes, hasHovered, hasLoaded, hoveredDirection, hoveredLeft, hoveredTransform, loadedTransform } = this.props;
+    const { classes, hasHovered, hasLoaded, hoveredDirection, hoveredLeft, hoveredTransform, loadedTransform, markers, duration } = this.props;
     let mouseisDownClass = (this.state.mouseIsDown) ? classes.mouseIsDown : "";
 
     return(
@@ -178,6 +191,18 @@ class Slider extends React.Component{
               classes.bars,
               classes.transition)}
               style={{transform: `scaleX(${this.props.value})`}}></div>
+
+              {
+                markers.map((o)=>(
+                  <div className={cx(
+                    classes.marker,
+                   )}
+                  style={{
+                   left: `${o.start/duration*100}%`,
+                  }}
+                  ></div>
+                ))
+              }
             <div className={cx(classes.handle_root)}>
               <div
                 className={cx(

@@ -51,6 +51,8 @@ export const vplayer = {
   widthVolume: '80px',
   compressedWidthVolume: '30px',
   volumeTransitionTime: '.05s',
+
+  markerColor: '#d9c01a',
 }
 const hideBottom = {
   bottom: '-15%',

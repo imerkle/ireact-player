@@ -140,7 +140,7 @@ class VideoPlayer extends React.Component{
     this.contextMenuId = `${randomGenerate()}-${Math.round((new Date()).getTime() / 1000)}`;
   }
   render(){
-    const { classes, stats, autoplay, poster, thumbnail_url, holdToDisplay }  = this.props;
+    const { classes, stats, autoplay, poster, thumbnail_url, markers, holdToDisplay }  = this.props;
     if(!autoplay && poster && !this.initialized){
       return (
         <Div className={cx(classes.fullHW)}
@@ -314,7 +314,9 @@ class VideoPlayer extends React.Component{
                   <Controls
                     handlePlayPause={this.handlePlayPause}
                     separator={this.props.separator}
-                    thumbnail_url={thumbnail_url} />
+                    thumbnail_url={thumbnail_url}
+                    markers={markers}
+                  />
                 </Div>
                 <Div className={cx(
                   classes.fullHW,

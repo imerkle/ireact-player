@@ -84,7 +84,7 @@ class Rails extends React.Component{
     this.props.VideoPlayerStore.setValue({bigPreview: currentCue})
   }
   render(){
-    const { classes, VideoPlayerStore, thumbnail_url } = this.props;
+    const { classes, VideoPlayerStore, thumbnail_url, markers } = this.props;
     if(this.cues){
       //console.log(this.newTime, perThumb);
       const cueIndex = limitBetween(Math.floor(this.newTime/perThumb),0,this.cues.length - 1);
@@ -149,6 +149,8 @@ class Rails extends React.Component{
             handle_baby: classes.handle_baby,
             current: classes.current,
           }}
+          markers={markers}
+          duration={VideoPlayerStore.tTotal}
         />
       </Fa>
     );
@@ -176,7 +178,7 @@ class Rails extends React.Component{
       }else{
         this.setPreview()
       }
-      
+
       if(this.showTip){
         const matrix = new window[getCssMatrix](getComputedStyle(handle)[getTransform]),
               handleLocation = matrix.m41,

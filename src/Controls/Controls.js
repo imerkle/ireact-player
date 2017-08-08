@@ -15,7 +15,7 @@ import {
   Settings,
   WideScreen,
   FullScreen,
-} from '../features'
+  } from '../features'
 
 const makeButton = (icon,handleClick,tooltip="") => {
   return (
@@ -44,12 +44,12 @@ class Controls extends React.Component{
     super(props);
   }
   render(){
-    let { VideoPlayerStore, classes, thumbnail_url } = this.props;
+    let { VideoPlayerStore, classes, thumbnail_url, markers } = this.props;
 
     return(
       <FaDiv c>
 
-        <Rails thumbnail_url={thumbnail_url}/>
+        <Rails thumbnail_url={thumbnail_url} markers={markers}/>
         {/*Here put the button icons*/}
         <FaDiv fa className={classes.controlButton}>
 
