@@ -20,9 +20,6 @@ jobs:
     steps:
       # Fetch the code
       - run:
-          name: Lint Everything
-          command:  yarn run lint
-      - run:
           name: Test Everything
           command:  jest --coverage
   build_it:
