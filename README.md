@@ -4,7 +4,7 @@ IReactPlayer
 ===========
 
 [![Latest npm version](https://img.shields.io/npm/v/ireact-player.svg)](https://www.npmjs.com/package/ireact-player)
-[![Build Status](https://img.shields.io/travis/dsslimshaddy/utube/master.svg)](https://travis-ci.org/dsslimshaddy/utube)
+[![Build Status](https://img.shields.io/circleci/dsslimshaddy/utube/master.svg)](https://circleci.com/dsslimshaddy/utube)
 [![Dependency Status](https://img.shields.io/david/dsslimshaddy/utube.svg)](https://david-dm.org/dsslimshaddy/utube)
 [![devDependency Status](https://img.shields.io/david/dev/dsslimshaddy/utube.svg)](https://david-dm.org/dsslimshaddy/utube?type=dev)
 
@@ -32,24 +32,6 @@ class App extends Component {
 See [the demo source](https://github.com/dsslimshaddy/utube/blob/master/docs/src/index.js) for a full example.
 
 For platforms like [Meteor](https://www.meteor.com) without direct use of `npm` modules, a minified version of `IReactPlayer` is located in `build` after installing. To generate this file yourself, checkout the repo and run `npm run build`
-
-#### Bower
-
-```bash
-bower install ireact-player --save
-```
-
-```html
-<script src='bower_components/react/react.js'></script>
-<script src='bower_components/react/react-dom.js'></script>
-<script src='bower_components/ireact-player/build/IReactPlayer.js'></script>
-<script>
-  ReactDOM.render(
-    <IReactPlayer src='https://www.youtube.com/watch?v=d46Azg3Pm4c' autoplay />,
-    document.getElementById('container')
-  )
-</script>
-```
 
 ### Demo
 
@@ -92,7 +74,6 @@ When playing file paths, an array of sources can be passed to the `url` prop to 
 
 ```jsx
 <IReactPlayer
-  playing
   src='foo.webm'
   caption_url="https://gist.githubusercontent.com/dsslimshaddy/ca3163ba1cb1d610f3b1aef3cb51eecf/raw"
 />
