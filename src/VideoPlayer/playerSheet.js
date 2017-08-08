@@ -52,17 +52,23 @@ export const vplayer = {
   compressedWidthVolume: '30px',
   volumeTransitionTime: '.05s',
 
-  markerColor: '#d9c01a',
+  markerColor: '#e8e211',
+  markerWidth: '4px',
 }
 const hideBottom = {
   bottom: '-15%',
   transition: '.15s linear bottom',
 };
+const onHoverControls = {
+  '& $controlsLayer':{
+    bottom: '0',
+  },
+  '& $controlBg':{
+    bottom: '0',
+  },
+};
 export const styleProps = {
   unhinder: {},
-  player: {
-    background: '#141414',
-  },
   fullHW: {
     width: '100%',
   	height: '100%',
@@ -211,8 +217,12 @@ export const styleProps = {
   	width: '100%!important',
   },
   showControls: {
-    '& $controlsLayer':{
-      bottom: '0',
+    ...onHoverControls,
+  },
+  player: {
+    background: '#141414',
+    '&:hover':{
+      ...onHoverControls,
     }
-  }
+  },  
 };

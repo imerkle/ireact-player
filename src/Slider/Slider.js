@@ -87,17 +87,16 @@ const styleSheet = createStyleSheet('MsonSlider',theme => ({
     /*SO/21557476 some genius shit here dont worry bout it*/
      position: 'absolute',
      width: '100%',
-     zIndex: '4',
+     zIndex: 11,
   },
   handles: {
     //.ut-handle,.ut-handle-baby{
-      zIndex: 11,
       transform: 'translateX(0px)',
       borderRadius: '50%',
   },
   marker: {
     backgroundColor: theme.vplayer.markerColor,
-    width: '2px',
+    width: theme.vplayer.markerWidth,
     zIndex: 10,
     height: '100%',
     position: 'absolute',

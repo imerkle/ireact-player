@@ -225,7 +225,7 @@ class VideoPlayer extends React.Component{
           onMouseEnter={()=>{this.onOver(true)}}
           onMouseLeave={()=>{this.onOver(false)}}
           onClick={(e) => {
-              if(e.target.closest(classes.unhinder)){
+              if(e.target.closest(`.${classes.unhinder}`)){
                 return false;
               }
               this.handlePlayPause()
