@@ -102,12 +102,21 @@ When playing file paths, an array of sources can be passed to the `url` prop to 
 />
 ```
 
+### CSS Styling
+
+It uses the same  styling solution (jss) as [`material-ui`](https://material-ui-525cf.firebaseapp.com/customization/css-in-js)
+
+For theming you need to pass a `theme` prop simmilar to [here](https://github.com/dsslimshaddy/utube/blob/master/src/VideoPlayer/playerSheet.js)
+
+[CSS Options are available here](https://github.com/dsslimshaddy/utube/blob/master/src/VideoPlayer/playerSheet.js)
+
+
 
 ### Methods
 
 Use [`ref`](https://facebook.github.io/react/docs/refs-and-the-dom.html) to call methods on the player. See [the demo app](docs/src/index.js) for an example of this.
 
-
+*Comming soon*
 
 ### Supported media
 

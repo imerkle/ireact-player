@@ -19,6 +19,13 @@ import getVendor from '../utils/getVendor.js';
 import { stToggle } from '../utils/dom.js';
 import { primaryPalette, vplayer, styleProps } from './playerSheet.js';
 
+
+const themeLight = createMuiTheme({
+  palette: createPalette({
+    type: 'light',
+  })
+});
+
 const theme = createMuiTheme({
   palette: createPalette({
     type: 'dark', // Switching the dark mode on is a single property value change.
@@ -27,12 +34,6 @@ const theme = createMuiTheme({
   vplayer: {
     ...vplayer
   }
-});
-
-const themeLight = createMuiTheme({
-  palette: createPalette({
-    type: 'light',
-  })
 });
 const styleSheet = createStyleSheet('MsonVideoPlayer', theme => ({
 ...styleProps
@@ -195,7 +196,7 @@ class VideoPlayer extends React.Component{
     };
 
     render_out = (
-    <MuiThemeProvider theme={theme}>
+    <MuiThemeProvider theme={this.props.theme || theme}>
      <Div className={cx(classes.fullHW)}>
       <Rnd
         default={{x: 0,y: 0,width: w, height: h}}
