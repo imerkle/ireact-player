@@ -69,9 +69,7 @@
     "lodash.uniqby": "^4.7.0",
     "prop-types": "^15.5.10",
     "react-perfect-scrollbar": "^0.2.1",
-    "react-rnd": "^5.0.9",
-    "react-tap-event-plugin": "^2.0.1",
-    "store": "^2.0.12"
+    "react-rnd": "^5.0.9"
   },
   "peerDependencies": {
     "material-ui": "next",
