@@ -67,7 +67,7 @@
     "lodash.findindex": "^4.6.0",
     "lodash.remove": "^4.7.0",
     "lodash.uniqby": "^4.7.0",
-    "prop-types": "^15.5.10",
+    "prop-types": "^15.6.2",
     "react-perfect-scrollbar": "^0.2.1",
     "react-rnd": "^5.0.9"
   },
