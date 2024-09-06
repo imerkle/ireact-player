@@ -33,7 +33,7 @@
     "webpack-dev-server": "^2.5.0"
   },
   "dependencies": {
-    "react-live": "^1.7.0"
+    "react-live": "^3.0.0"
   },
   "author": "dsslimshaddy",
   "license": "MIT"
